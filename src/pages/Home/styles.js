@@ -1,6 +1,14 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+    },
+    linear: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
     container: {
         flex: 1,
         marginTop: 0,
@@ -8,10 +16,10 @@ const styles = StyleSheet.create({
     },
     card: {
         marginTop: 25,
-        height: 220,
+        height: 150,
         width: '100%',
-        padding: 15,
-        marginLeft: 30,
+        padding: 20,
+        marginLeft: 40,
         backgroundColor: 'transparent',
         alignSelf: 'center',
         alignItems: 'center',
@@ -22,13 +30,13 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontWeight: 'bold',
         alignSelf: 'flex-start',
-        top: 50,
+        top: 20,
     },
     viewArrow: {
         flexDirection: 'row',
         justifyContent: 'center',
         marginRight: 20,
-        marginTop: 70,
+        marginTop: 50,
         alignSelf: 'flex-start',
     },
     iconArrow: {
@@ -38,15 +46,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     button: {
-        backgroundColor: '#ca9751',
+        backgroundColor: '#f192a9',
     },
     buttonMore: {
-        backgroundColor: '#ca9751',
-        marginTop: 20,
-        marginBottom: 40,
-        width: '91%',
-        alignSelf: 'center',
-        height: 40,
+        backgroundColor: '#e9ddf2',
+        alignItems: 'center',
+        paddingVertical: 15,
+        marginHorizontal: 20,
+        marginVertical: 20,
+        height: 50,
+		borderRadius: 100,        
+    },
+    textButtonMore:{
+        color:'#000'
     },
     buttonLabelMore: {
         alignSelf: 'center',

@@ -3,6 +3,7 @@ import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Image } from 're
 import firestore from '@react-native-firebase/firestore';
 import {styles} from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Catalog = ({navigation}) =>  {
     const [services, setServices] = useState(null);
@@ -56,18 +57,21 @@ const Catalog = ({navigation}) =>  {
 
     return (
         <SafeAreaView style={styles.container}>
-            {
-                loading ? 
-                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <ActivityIndicator size='large' color='#211F20' />
-                    </View>
-                : 
-                    <FlatList
-                        data={services}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
-                    />
-            }
+            <LinearGradient useAngle={true} angle={130} locations={[0.4,0.7,1]} colors={['#a295f1', '#d592c7', '#f192a9']} style={styles.gradient}>  
+                <Text style={styles.servicesText}>Serviços</Text>      
+                {
+                    loading ? 
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <ActivityIndicator size='large' color='#211F20' />
+                        </View>
+                    : 
+                        <FlatList
+                            data={services}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.id}
+                        />
+                }
+            </LinearGradient>
         </SafeAreaView>
     )
 }

@@ -53,10 +53,11 @@ const AppRoutes = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
+                headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
 
-                if (route.name === 'Home') {
+                if (route.name === 'Magia do Brincar') {
                     iconName = focused
                     ? 'home'
                     : 'home-outline';
@@ -65,7 +66,7 @@ const AppRoutes = () => {
                 }
 
                 else if (route.name === 'Carrinho') {
-                    iconName = focused ? 'cart' : 'cart-outline';
+                    iconName = focused ? 'calendar' : 'calendar-outline';
                 }
 
                 else if (route.name === 'Contato') {
@@ -80,14 +81,14 @@ const AppRoutes = () => {
                 return <Ionicons name={iconName} size={size} color={color} />;
                 
                 },
-                tabBarActiveTintColor: 'black',
+                tabBarActiveTintColor: '#cd92ca',
                 tabBarInactiveTintColor: 'gray',
                 tabBarShowLabel: false,
             })}
         >
-            <Tab.Screen name="Home" component={ServiceStackScreen} />
-            <Tab.Screen name="Catálogo" component={CatalogStackScreen} />
+            <Tab.Screen name="Magia do Brincar" component={ServiceStackScreen} />
             <Tab.Screen name="Carrinho" component={CartStackScreen} options={{tabBarBadge: lengthItens}} />
+            <Tab.Screen name="Catálogo" component={CatalogStackScreen} />
             <Tab.Screen name="Contato" component={Contact} />
             <Tab.Screen name="Perfil" component={Profile} />
         </Tab.Navigator>

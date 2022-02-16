@@ -6,6 +6,9 @@ const styles = StyleSheet.create({
         marginTop: 0,
         backgroundColor: '#FFF'
       },
+      gradient: {
+        flex: 1,
+    },
       item: {
         flex: 1,
         flexDirection: 'row',
@@ -30,6 +33,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         width: 170
+      },
+      servicesText:{
+        alignSelf: 'center',
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginVertical: 20,
+        color: '#fff'
       },
       iconArrow: {
         alignSelf:'center'
