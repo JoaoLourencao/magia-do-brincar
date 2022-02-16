@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "522616036500",
+    "project_id": "foxdetail-39a14",
+    "storage_bucket": "foxdetail-39a14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522616036500:android:3ba4b2327e70620afc2881",
+        "android_client_info": {
+          "package_name": "com.foxdetail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522616036500-9qj9j84lvcjcaiue1ovklivvepvdicgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxvV-4Mu5BvHnDaPqTveotmFjeK_Gj9PA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522616036500-9qj9j84lvcjcaiue1ovklivvepvdicgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

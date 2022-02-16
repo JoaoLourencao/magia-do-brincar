@@ -1,0 +1,1 @@
+## FoxDetail App
