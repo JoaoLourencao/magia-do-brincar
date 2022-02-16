@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f192a9',
     },
     buttonMore: {
-        backgroundColor: '#e9ddf2',
+        backgroundColor: 'rgba(233, 221, 242, 0.9)',
         alignItems: 'center',
         paddingVertical: 15,
         marginHorizontal: 20,
@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
 		borderRadius: 100,        
     },
     textButtonMore:{
-        color:'#000'
+        color:'#514a78',
+        fontWeight:'bold'
     },
     buttonLabelMore: {
         alignSelf: 'center',

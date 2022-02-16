@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Image } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {styles} from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -35,13 +35,15 @@ const Catalog = ({navigation}) =>  {
 
     const Item = ({ name, img, id }) => {
         return (
-            <View style={styles.item}>
-                <Image source={{uri: img}}
-                    style={{width: 100, height: 100}} />
-                <Text style={styles.title} numberOfLines={1}>{name}</Text>
+            <TouchableOpacity onPress={() => goDetail(id)}>
+                <View style={styles.item}>
+                    <Image source={{uri: img}}
+                        style={{width: 100, height: 100, borderRadius: 10}}/>
+                    <Text style={styles.title} numberOfLines={1} onPress={() => goDetail(id)}>{name}</Text>
 
-                <Ionicons onPress={() => goDetail(id)} name="arrow-forward" size={26} color="black" style={styles.iconArrow} />
-            </View>
+                    <Ionicons name="arrow-forward" size={26} color="#514a78" style={styles.iconArrow} />
+                </View>
+            </TouchableOpacity>            
     )};
 
     const renderItem = ({ item }) => {

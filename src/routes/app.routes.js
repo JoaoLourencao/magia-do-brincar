@@ -89,7 +89,7 @@ const AppRoutes = () => {
             <Tab.Screen name="Magia do Brincar" component={ServiceStackScreen} />
             <Tab.Screen name="Carrinho" component={CartStackScreen} options={{tabBarBadge: lengthItens}} />
             <Tab.Screen name="Catálogo" component={CatalogStackScreen} />
-            <Tab.Screen name="Contato" component={Contact} />
+            {/* <Tab.Screen name="Contato" component={Contact} /> */}
             <Tab.Screen name="Perfil" component={Profile} />
         </Tab.Navigator>
 

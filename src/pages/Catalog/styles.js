@@ -14,12 +14,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // backgroundColor: '#EC7B4F',
+        backgroundColor: 'rgba(233, 221, 242, 0.9)',
         padding: 10,
-        marginVertical: 8,
-        marginHorizontal: 16,
-        borderRadius: 6,
-        height: 90
+        marginVertical: 13,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        height: 110,
       },
       viewLineCard: {
         flex: 1,
@@ -32,17 +32,19 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         fontSize: 15,
         fontWeight: 'bold',
-        width: 170
+        width: 170,
+        color: '#514a78'
       },
       servicesText:{
         alignSelf: 'center',
         fontSize: 25,
         fontWeight: 'bold',
-        marginVertical: 20,
+        marginVertical: 15,
         color: '#fff'
       },
       iconArrow: {
-        alignSelf:'center'
+        alignSelf:'center',
+        marginRight: 10        
       },
       iconCar: {
           alignSelf: 'center',
