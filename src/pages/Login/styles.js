@@ -3,9 +3,11 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#211F20',
-        justifyContent: 'center',
+        marginTop: 0,
+        backgroundColor: '#FFF'
+    },
+    gradient: {
+        flex: 1,
     },
     card: {
         width: '95%',
@@ -17,16 +19,40 @@ const styles = StyleSheet.create({
     logo: {
         width: '95%',
         height: '15%',
-        position: 'absolute',
         top: '2%',
-        backgroundColor: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
     },
+    inputBox:{
+        marginTop: 110
+    },  
+    buttonMore: {
+        backgroundColor: 'rgba(233, 221, 242, 0.9)',
+        alignItems: 'center',
+        paddingVertical: 15,
+        height: 50,
+		borderRadius: 100,     
+        width: '85%',
+        marginTop: 20,
+        justifyContent: 'center',
+        alignSelf: 'center'
+    },    
+    textButtonContinue:{
+        color:'#514a78',
+        fontWeight:'bold',
+        fontSize: 16
+
+    },
+    textButtonMore:{
+        color:'#fff',
+        fontWeight:'bold',
+        fontSize: 16
+    },
     textInput: {
-        width: '80%',
+        width: '85%',
         alignSelf: 'center',
         marginTop: 15,
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
     },
     button: {
         position: 'absolute',
@@ -41,13 +67,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttonRegister: {
-        position: 'absolute',
-        bottom: '5%',
-        width: '80%',
-        alignSelf: 'center',
-        backgroundColor: 'white',
-        borderColor: '#211F20',
-        borderWidth: 2,
+        marginTop: 20,
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
     buttonLabelRegister: {
         color: '#211F20',
@@ -85,7 +107,6 @@ const styles = StyleSheet.create({
     },
     errorLoginView: {
         marginTop: 20,
-        padding: 10,
         width: '80%',
         alignSelf: 'center',
         alignItems: 'center',
@@ -93,9 +114,10 @@ const styles = StyleSheet.create({
     },
     labelErrorLogin: {
         alignSelf: 'center',
-        color: 'gray',
+        color: 'red',
         fontWeight: 'bold',
         fontSize: 14,
+        opacity: 0.8
     },
 });
 
