@@ -15,7 +15,7 @@ const App = () => (
         <Routes />
       </CartProvider>
     </AuthProvider>
-  </NavigationContainer>
+  </NavigationContainer> 
 );
 
 export default App;
