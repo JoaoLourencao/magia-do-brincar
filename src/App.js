@@ -9,7 +9,6 @@ import { StatusBar } from 'react-native'
 
 const App = () => (
   <NavigationContainer>
-    <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#a295f1" translucent = {true}/>
     <AuthProvider>
       <CartProvider>
         <Routes />

@@ -49,8 +49,8 @@ const Login = ({navigation}) =>  {
                     <Image
                         style={{
                             marginTop: '30%',
-                            width: 150,
-                            height: 150,
+                            width: 250,
+                            height: 250,
                             alignSelf: 'center',
                             resizeMode: 'contain',
                         }}
