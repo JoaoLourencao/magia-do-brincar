@@ -12,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const Profile = ({}) => {
     const {user, signOutApp} = useAuth();
-    const [nameImg, setNameImg] = useState(user.email.substr(0, 2).toUpperCase());
+    // const [nameImg, setNameImg] = useState(user.email.substr(0, 2).toUpperCase());
     const [disableInputs, setDisableInputs] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
