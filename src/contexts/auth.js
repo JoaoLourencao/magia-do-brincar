@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 import auth from '@react-native-firebase/auth';
+import api from '../services/apis'
 
 const AuthContext = createContext({
     signed: false, 
@@ -32,26 +33,26 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     async function signIn(email, password) {
-        const responseData = await auth().signInWithEmailAndPassword(email, password);
+        const responseData = await api.post('/login', {user: email, password});
 
         if(!responseData) {
             setError(true);
-        }else{
-            setUser(responseData.user._user);
-
-            await AsyncStorage.setItem('@FoxDetail:user', JSON.stringify(responseData.user._user));
+        }
+        else{
+            setUser(responseData.data.data);
+            await AsyncStorage.setItem('@FoxDetail:user', JSON.stringify(responseData.data.data));
         }
 
     }
 
     function signOutApp() {
-       auth().signOut()
-            .then(() => {
-                console.log('signout firebase succefull');
-            })
-            .catch((error) => {
-                console.log('error signout firebase: ', error);
-            })
+    //    auth().signOut()
+    //         .then(() => {
+    //             console.log('signout firebase succefull');
+    //         })
+    //         .catch((error) => {
+    //             console.log('error signout firebase: ', error);
+    //         })
             
         
         AsyncStorage.clear()
