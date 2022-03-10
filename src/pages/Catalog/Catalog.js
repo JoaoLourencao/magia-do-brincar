@@ -1,29 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import {styles} from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
+import api from '../../services/apis'
+import {BASE_URL_API} from "@env"
 
 const Catalog = ({navigation}) =>  {
     const [services, setServices] = useState(null);
-    const [sizeServices, setSizeServices] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function getServices() {
-            let arrayServices = [];
-            firestore()
-                .collection('services').get()
-                .then(querySnapshot => {
-                        setSizeServices(querySnapshot.size);
-                        querySnapshot.forEach(documentSnapshot => {
-                            arrayServices.push({id: documentSnapshot.id, ...documentSnapshot.data()});
-                        });
-                        setServices(arrayServices);
-                        setLoading(false);
-                });
-        };
+        const getServices = async () => {
+            let services = (await api.get('/services')).data
+            setServices(services.data)
+            setLoading(false)
+        }
        getServices();
     }, []);
 
@@ -33,14 +25,12 @@ const Catalog = ({navigation}) =>  {
         })
     }
 
-    const Item = ({ name, img, id }) => {
+    const Item = ({ service, image, id }) => {
         return (
-            <TouchableOpacity onPress={() => goDetail(id)}>
+            <TouchableOpacity>
                 <View style={styles.item}>
-                    <Image source={{uri: img}}
-                        style={{width: 100, height: 100, borderRadius: 10}}/>
-                    <Text style={styles.title} numberOfLines={1} onPress={() => goDetail(id)}>{name}</Text>
-
+                    <Image source={{uri: `${BASE_URL_API}/${image}`}} style={{width: 75, height: 75, borderRadius: 5}}/>
+                    <Text style={styles.title} numberOfLines={1}>{service}</Text>
                     <Ionicons name="arrow-forward" size={26} color="#514a78" style={styles.iconArrow} />
                 </View>
             </TouchableOpacity>            
@@ -49,13 +39,12 @@ const Catalog = ({navigation}) =>  {
     const renderItem = ({ item }) => {
         return (
             <Item 
-                name={item.name}
-                img={item.img}
+                service={item.service}
+                image={item.image}
                 id={item.id}
             />
         )
     }
-
 
     return (
         <SafeAreaView style={styles.container}>
