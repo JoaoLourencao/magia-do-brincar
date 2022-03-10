@@ -7,7 +7,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(async (config, error) => {
-  const user = JSON.parse(await AsyncStorage.getItem('@FoxDetail:user'))
+  const user = JSON.parse(await AsyncStorage.getItem('@MagiaDoBrincar:user'))
 
   if(user) {
     config.headers.authorization = `${user.token}`
