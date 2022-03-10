@@ -1,41 +1,38 @@
 import React, {useState, useEffect} from 'react';
 import { TextInput, Button, Text } from 'react-native-paper';
-import { Image, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image, View, SafeAreaView, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import {styles} from './styles';
 import LogoImg from '../../assets/img/logo.png';
 import {useAuth} from '../../contexts/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
+import Loading from '../../components/Loading';
 
 const Login = ({navigation}) =>  {
     const [statusError, setstatusError] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loadingButton, setLoadingButton] = useState(false);
     const [visibleModal, setVisibleModal] = useState(false);
     const {signIn, loginError} = useAuth();
+    const [isLoading, setIsLoading] = useState(false);   
 
-    useEffect(() => {
-        function verifyErrorLogin() {
-            if(loginError) {
-                setVisibleModal(true);
-                setLoadingButton(false);
-            }
-        }
+    const auth = async () => {
+        Keyboard.dismiss();
 
-        verifyErrorLogin();
-    }, [loginError]);
-
-    const auth = () => {
         if(email.length === 0 || password.length === 0){
             setstatusError(true);
-            setVisibleModal(true);
+            Alert.alert('Oops!', 'Senha e e-mail devem ser preenchidos');
         }else{
-            setstatusError(false);
-            setLoadingButton(true);
-            signIn(email,password);
-        }
+            setIsLoading(true);
 
+            await signIn(email,password).then(function () {
+                setIsLoading(false);
+            }).catch((error) => {
+                console.log('tomar no anus ', JSON.stringify(error));
+                Alert.alert('Oops!', JSON.stringify(error.message));
+                setIsLoading(false);
+            });
+        }
     }
 
     const goRegister = () => {
@@ -81,7 +78,7 @@ const Login = ({navigation}) =>  {
                         mode="flat"
                         value={password}
                         error={statusError}
-                        onChangeText={(txt) => setPassword(txt)}
+                        onChangeText={(txt) => {setPassword(txt), setstatusError(false)}}
                         style={styles.textInput}
                         secureTextEntry
                         theme={{
@@ -106,13 +103,19 @@ const Login = ({navigation}) =>  {
                     :
                         <View></View>
                 }
-                <TouchableOpacity
-                    style={styles.buttonMore}
-                    onPress={auth}
-                    activeOpacity={0.75}
-                >                    
-                    <Text style={styles.textButtonContinue}>Continuar</Text>
-                </TouchableOpacity> 
+                {isLoading ? (
+                    <View style={styles.loadLogin}>
+                        <Loading isLoading={isLoading} />
+                    </View>
+                ) : (
+                    <TouchableOpacity
+                        style={styles.buttonMore}
+                        onPress={auth}
+                        activeOpacity={0.75}
+                    >                    
+                        <Text style={styles.textButtonContinue}>Login</Text>
+                    </TouchableOpacity> 
+                )}                
                 {/* <Button
                     loading={loadingButton}
                     mode="contained"

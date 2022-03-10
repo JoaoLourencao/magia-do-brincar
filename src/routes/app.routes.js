@@ -57,7 +57,7 @@ const AppRoutes = () => {
                 tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
 
-                if (route.name === 'Magia Do Brincar') {
+                if (route.name === 'MagiaDoBrincar') {
                     iconName = focused
                     ? 'home'
                     : 'home-outline';
