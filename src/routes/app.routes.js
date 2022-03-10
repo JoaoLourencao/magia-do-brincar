@@ -57,7 +57,7 @@ const AppRoutes = () => {
                 tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
 
-                if (route.name === 'Magia do Brincar') {
+                if (route.name === 'Magia Do Brincar') {
                     iconName = focused
                     ? 'home'
                     : 'home-outline';
@@ -86,7 +86,7 @@ const AppRoutes = () => {
                 tabBarShowLabel: false,
             })}
         >
-            <Tab.Screen name="Magia do Brincar" component={ServiceStackScreen} />
+            <Tab.Screen name="MagiaDoBrincar" component={ServiceStackScreen} />
             <Tab.Screen name="Carrinho" component={CartStackScreen} options={{tabBarBadge: lengthItens}} />
             <Tab.Screen name="Catálogo" component={CatalogStackScreen} />
             {/* <Tab.Screen name="Contato" component={Contact} /> */}

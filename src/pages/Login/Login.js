@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { TextInput, Button, Text } from 'react-native-paper';
 import { Image, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import {styles} from './styles';
-import LogoImg from '../../assets/img/logo_off_background.png';
+import LogoImg from '../../assets/img/logo.png';
 import {useAuth} from '../../contexts/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
@@ -44,7 +44,7 @@ const Login = ({navigation}) =>  {
 
     return (
         <SafeAreaView style={styles.container}>
-            <LinearGradient useAngle={true} angle={300} locations={[0.4,0.7,1]} colors={['#a295f1', '#d592c7', '#f192a9']} style={styles.gradient}>  
+            <LinearGradient useAngle={true} angle={150} locations={[0.4,0.7,1]} colors={['#a295f1', '#d592c7', '#f192a9']} style={styles.gradient}>  
                 <View style={styles.logo}>
                     <Image
                         style={{

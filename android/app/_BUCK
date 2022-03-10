@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.foxdetail",
+    package = "com.magiadobrincar",
 )
 
 android_resource(
     name = "res",
-    package = "com.foxdetail",
+    package = "com.magiadobrincar",
     res = "src/main/res",
 )
 

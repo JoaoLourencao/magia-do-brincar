@@ -20,7 +20,7 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         async function loadStorageData() {
-            const storageUser = await AsyncStorage.getItem('@FoxDetail:user');
+            const storageUser = await AsyncStorage.getItem('@MagiaDoBrincar:user');
 
             if (storageUser) {
                 setUser(JSON.parse(storageUser));
@@ -40,7 +40,7 @@ export const AuthProvider = ({children}) => {
         }
         else{
             setUser(responseData.data.data);
-            await AsyncStorage.setItem('@FoxDetail:user', JSON.stringify(responseData.data.data));
+            await AsyncStorage.setItem('@MagiaDoBrincar:user', JSON.stringify(responseData.data.data));
         }
 
     }

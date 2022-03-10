@@ -1,1 +1,1 @@
-## FoxDetail App
+## MagiaDoBrincar App

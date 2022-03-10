@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, Image, Linking } from 'react-native';
 import {styles} from './styles';
-import LogoImg from '../../assets/img/logo_off_background.png';
+import LogoImg from '../../assets/img/logo.png';
 import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 

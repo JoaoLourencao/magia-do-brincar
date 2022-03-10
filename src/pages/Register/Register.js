@@ -3,7 +3,7 @@ import { View, Text, Image } from 'react-native'
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput, Button } from 'react-native-paper';
-import LogoImg from '../../assets/img/logo_off_background.png';
+import LogoImg from '../../assets/img/logo.png';
 import auth from '@react-native-firebase/auth';
 
 const Register = ({navigation}) => {

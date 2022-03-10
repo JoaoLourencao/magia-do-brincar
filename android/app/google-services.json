@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "522616036500",
-    "project_id": "foxdetail-39a14",
-    "storage_bucket": "foxdetail-39a14.appspot.com"
+    "project_id": "magiadobrincar-39a14",
+    "storage_bucket": "magiadobrincar-39a14.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:522616036500:android:3ba4b2327e70620afc2881",
         "android_client_info": {
-          "package_name": "com.foxdetail"
+          "package_name": "com.magiadobrincar"
         }
       },
       "oauth_client": [
