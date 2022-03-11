@@ -8,9 +8,9 @@ const styles = StyleSheet.create({
     viewProfile: {
         flex: 1,
         borderRadius: 5,
-        padding: 15,
+        padding: 0,
         alignSelf: 'stretch',
-        marginTop: 20,
+        marginTop: 0,
     },
     gradient: {
         flex: 1,
@@ -42,25 +42,34 @@ const styles = StyleSheet.create({
     infoItem: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-        marginTop: 20,
-        paddingHorizontal: 25
+        alignItems: 'flex-start',
+        marginBottom: 10,
+        marginTop: 0,
+        paddingHorizontal: 0
     },
-    textInfo: {
-        fontSize: 15,
-        color: "#fff",
+    profileText:{
+        alignSelf: 'center',
+        fontSize: 25,
         fontWeight: 'bold',
-        fontStyle: 'italic'
+        marginVertical: 15,
+        color: '#fff'
+      },
+    textInfo: {
+        fontSize: 20,
+        color: "#ffffffba",
+        fontWeight: 'bold',
     },
     textInput: {
-        width: '90%',
+        width: '100%',
         height: 50,
         alignSelf: 'center',
-        marginTop: 15,
+        marginTop: 10,
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
     },
+    loadLogin: {
+        marginTop: 85,
+        marginBottom: 15,
+      },
     textInputDisabled: {
         width: '90%',
         height: 50,
@@ -118,7 +127,7 @@ const styles = StyleSheet.create({
     // },
     viewInputs: {
         flexDirection: 'row',
-        width: '98%',
+        width: '100%',
         alignItems: 'center',
     },
     iconInputs: {

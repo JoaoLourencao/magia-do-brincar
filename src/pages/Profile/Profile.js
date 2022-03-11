@@ -1,37 +1,48 @@
 import React, {useState,useEffect} from 'react';
 import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import AsyncStorage from "@react-native-community/async-storage";
 
 import {useAuth} from '../../contexts/auth';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import firestore from '@react-native-firebase/firestore';
 import LinearGradient from 'react-native-linear-gradient';
+import Loading from '../../components/Loading';
+
 
 const Profile = ({}) => {
     const {user, signOutApp} = useAuth();
-    // const [nameImg, setNameImg] = useState(user.email.substr(0, 2).toUpperCase());
     const [disableInputs, setDisableInputs] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [firstAccess, setFirstAccess] = useState(true);
-    const [loadingButton, setLoadingButton] = useState(false);
-    const [doc, setDoc] = useState('');
-    useEffect(() => {
-        async function getProfile(){
-            const profile = await firestore().collection(`${user.uid}_profile`).get();
-            if(profile.docs.length > 0) {
-                setName(profile.docs[0].data().name);
-                setPhone(profile.docs[0].data().phone);
-                setDoc(profile.docs[0].ref._documentPath._parts[1]);
-                setFirstAccess(false);
-            }
-        };
-        getProfile();
+    const [isLoading, setIsLoading] = useState(false);   
+
+    useEffect(() => { 
+        setIsLoading(true);
+
+        getProfile().then(function (profile) {
+            profile = JSON.parse(profile);
+            console.log("prefil", profile)
+            const people = profile.people;
+            console.log(people, "aaaaaaaaaaaa")
+            console.log(people[0].name, "bbbbbb")
+
+            const completeName = people[0].name + ' ' + people[0].last_name;
+            console.log(completeName, "bbbbbbbbbbbb")
+
+            setName(completeName);
+            setIsLoading(false);
+        });
     }, []);
 
+    async function getProfile(){
+        let profile =  await AsyncStorage.getItem('@MagiaDoBrincar:user');
+
+        return profile;
+    };
 
     const handleLogout = () => {
         signOutApp();
@@ -76,21 +87,25 @@ const Profile = ({}) => {
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient useAngle={true} angle={300} locations={[0.4,0.7,1]} colors={['#a295f1', '#d592c7', '#f192a9']} style={styles.gradient}>
+                <Text style={styles.profileText}>Perfil</Text>      
                 <ScrollView>
+                {isLoading ? (
+                    <View style={styles.loadLogin}>
+                        <Loading isLoading={isLoading} />
+                    </View>
+                ) : (
                     <View style={styles.viewProfile}>
                         <View style={styles.gridInfo}>
                             <View style={styles.infoItem}>
-                                <Text style={styles.textInfo}>{user.email}</Text>
-                                <Icon name="envelope" size={15} color="#fff" style={styles.iconInfo} />
+                                <Text style={styles.textInfo}>Acesso</Text>
                             </View>
                             <View style={styles.viewInputs}>
-                                <Ionicons name="person" size={20} color="#fff" style={styles.iconInputs} />
                                  <TextInput
                                     label="Nome"
                                     mode="flat"
                                     value={name}
                                     style={disableInputs ? styles.textInputDisabled : styles.textInput}
-                                    type="email"
+                                    type="text"
                                     editable={disableInputs}
                                     placeholderTextColor="steelblue"
                                     theme={{
@@ -104,7 +119,6 @@ const Profile = ({}) => {
                                 />
                             </View>
                             <View style={styles.viewInputs}>
-                                <Ionicons name="call" size={20} color="#fff" style={styles.iconInputs} />
                                 <TextInput
                                     value={phone}
                                     label="Telefone"
@@ -156,10 +170,11 @@ const Profile = ({}) => {
                             <Text style={styles.textButtonExit}>Sair</Text>
                         </TouchableOpacity>                        
                     </View>
+                )}                    
                 </ScrollView>
             </LinearGradient>
         </SafeAreaView>
-    )
+    ) 
 }
 
 export default Profile;
