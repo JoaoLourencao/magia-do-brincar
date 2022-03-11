@@ -1,7 +1,7 @@
 import React from 'react';
 import Profile from '../pages/Profile';
 import Home from '../pages/Home';
-import Catalog from '../pages/Catalog';
+import Service from '../pages/Service';
 import Contact  from '../pages/Contact';
 import Cart from '../pages/Cart';
 import Rating from '../pages/Rating';
@@ -14,7 +14,7 @@ import {useCart} from '../contexts/cart';
 
 const Tab = createBottomTabNavigator();
 const ServiceStack = createStackNavigator();
-const CatalogStack = createStackNavigator();
+const PageServiceStack = createStackNavigator();
 const CartStack = createStackNavigator();
 
 const ServiceStackScreen = () => {
@@ -27,12 +27,12 @@ const ServiceStackScreen = () => {
 };
 
 
-const CatalogStackScreen = () => {
+const PageServiceStackScreen = () => {
     return (
-        <CatalogStack.Navigator screenOptions={{headerShown: false}}>
-            <CatalogStack.Screen name="Catálogo" component={Catalog} />
-            <CatalogStack.Screen name="DetailService" component={DetailService} />
-        </CatalogStack.Navigator>
+        <PageServiceStack.Navigator screenOptions={{headerShown: false}}>
+            <PageServiceStack.Screen name="Serviços" component={Service} />
+            <PageServiceStack.Screen name="DetailService" component={DetailService} />
+        </PageServiceStack.Navigator>
     )
 };
 
@@ -61,8 +61,8 @@ const AppRoutes = () => {
                     iconName = focused
                     ? 'home'
                     : 'home-outline';
-                } else if (route.name === 'Catálogo') {
-                    iconName = focused ? 'basket' : 'basket-outline';
+                } else if (route.name === 'Serviços') {
+                    iconName = focused ? 'list' : 'list-outline';
                 }
 
                 else if (route.name === 'Carrinho') {
@@ -88,7 +88,7 @@ const AppRoutes = () => {
         >
             <Tab.Screen name="MagiaDoBrincar" component={ServiceStackScreen} />
             <Tab.Screen name="Carrinho" component={CartStackScreen} options={{tabBarBadge: lengthItens}} />
-            <Tab.Screen name="Catálogo" component={CatalogStackScreen} />
+            <Tab.Screen name="Serviços" component={PageServiceStackScreen} />
             {/* <Tab.Screen name="Contato" component={Contact} /> */}
             <Tab.Screen name="Perfil" component={Profile} />
         </Tab.Navigator>

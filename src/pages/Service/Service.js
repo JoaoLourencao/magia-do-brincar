@@ -6,7 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import api from '../../services/apis'
 import {BASE_URL_API} from "@env"
 
-const Catalog = ({navigation}) =>  {
+const Service = ({navigation}) =>  {
     const [services, setServices] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -29,7 +29,8 @@ const Catalog = ({navigation}) =>  {
         return (
             <TouchableOpacity>
                 <View style={styles.item}>
-                    <Image source={{uri: `${BASE_URL_API}/${image}`}} style={{width: 75, height: 75, borderRadius: 5}}/>
+                    {image && <Image source={{uri: `${BASE_URL_API}/${image}`}} style={{width: 75, height: 75, borderRadius: 5}}/>}
+                    {!image && <Image source={require(`../../assets/img/logo.png`)} style={{resizeMode: 'contain', width: 75, height: 75, borderRadius: 5}}/>}
                     <Text style={styles.title} numberOfLines={1}>{service}</Text>
                     <Ionicons name="arrow-forward" size={26} color="#514a78" style={styles.iconArrow} />
                 </View>
@@ -67,4 +68,4 @@ const Catalog = ({navigation}) =>  {
     )
 }
 
-export default Catalog;
+export default Service;
