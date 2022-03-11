@@ -1,6 +1,6 @@
 # A Magia do Brincar
 
-![image info](./src/assets/assets/img/logo.png "MagiaDoBrincar")
+![image info](./src/assets/img/logo.png "MagiaDoBrincar")
 
 ## Index
 
