@@ -10,7 +10,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const Home = ({navigation}) => {
     
     const goAllServices = () => {
-        navigation.navigate('Catálogo');
+        navigation.navigate('Serviços');
     };
 
     const goProfile = () => {

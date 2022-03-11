@@ -12,7 +12,7 @@ const Cart = ({navigation}) => {
     const {user} = useAuth();
 
     const goServices = () => {
-        navigation.navigate('Catálogo');
+        navigation.navigate('Serviços');
     }
 
     const saveCart = () => {
