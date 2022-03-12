@@ -118,13 +118,6 @@ const styles = StyleSheet.create({
         color:'#514a78',
         fontWeight:'bold'
     },
-    // textInput: {
-    //     marginTop: 10,
-    //     borderBottomWidth: 1,
-    //     borderBottomColor: 'gray',
-    //     width: '90%',
-    //     alignSelf: 'center',
-    // },
     viewInputs: {
         flexDirection: 'row',
         width: '100%',
@@ -152,3 +145,4 @@ const styles = StyleSheet.create({
 });
 
 export { styles };
+
