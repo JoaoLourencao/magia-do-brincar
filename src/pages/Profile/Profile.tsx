@@ -75,7 +75,7 @@ const Profile: React.FC<IProfileState> = () => {
                     label="Nome"
                     mode="flat"
                     value={name}
-                    type="text"
+                    style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
                       colors: { 
