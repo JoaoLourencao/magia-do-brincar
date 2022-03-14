@@ -4,14 +4,14 @@
 
 ## Index
 
-- [Index](#tabela-de-conte%C3%BAdo)
+- [Index]
 - [About](#sobre-o-projeto)
 - [Getting Started](#come%C3%A7ando)
   - [Install](#instala%C3%A7%C3%A3o)
 
 <!-- ABOUT THE PROJECT -->
 
-## About
+## Sobre o Projeto
 
 Aplicativo para agendamento de horário e serviços para babás.
 
