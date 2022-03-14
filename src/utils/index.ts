@@ -76,7 +76,5 @@ export const returnOnlyNumbers = (stringToStrip: string): string => {
  * @param {string} date
  */
  export const convertDateTime = (date: string): string => {
-     console.log(date)
-     console.log(moment(date).format('DD/MM/YYYY, hh:mm:ss a'))
-    return moment(date).format('DD/MM/YYYY');
+    return date ? moment(date).format('DD/MM/YYYY') : null;
 }
