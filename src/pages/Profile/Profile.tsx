@@ -108,15 +108,20 @@ const Profile: React.FC<IProfileState> = () => {
       setName(people.name + ' ' + people.last_name);
       setDocument(people.document);
       setBirthdate(convertDateTime(people.birth_date));
-      setPhone(phone.ddd + phone.phone)
-      setPostalcode(address.postal_code);
-      setCity(address.city);
-      setUf(address.uf);
-      setPublicplace(address.public_place);
-      setNumber(address.number);
-      setComplement(address.complement);
-      setAddressDesc(address.description);
-      setAddresses(profile.addresses);
+      if(phone){
+        setPhone(phone.ddd + phone.phone)
+      }
+
+      if(address){
+        setPostalcode(address.postal_code);
+        setCity(address.city);
+        setUf(address.uf);
+        setPublicplace(address.public_place);
+        setNumber(address.number);
+        setComplement(address.complement);
+        setAddressDesc(address.description);
+        setAddresses(profile.addresses);
+      }
 
       setIsLoading(false);
     });
