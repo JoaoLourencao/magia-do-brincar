@@ -5,9 +5,9 @@
 ## Index
 
 - [Index]
-- [About](#sobre-o-projeto)
-- [Getting Started](#come%C3%A7ando)
-  - [Install](#instala%C3%A7%C3%A3o)
+- [Sobre](#sobre-o-projeto)
+- [Inicialização](#inicializa%C3%A7%C3%A3o)
+  - [Instalação](#instala%C3%A7%C3%A3o)
 
 <!-- ABOUT THE PROJECT -->
 
@@ -17,7 +17,7 @@ Aplicativo para agendamento de horário e serviços para babás.
 
 <!-- GETTING STARTED -->
 
-## Getting Started
+## Inicialização
 
 Para conseguir executar o projeto, clone o projeto e siga os passos abaixo.
 
