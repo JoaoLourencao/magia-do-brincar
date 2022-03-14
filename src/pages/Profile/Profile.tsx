@@ -11,18 +11,28 @@ import LinearGradient from 'react-native-linear-gradient';
 import { TextInput } from 'react-native-paper';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
+import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
 import { styles } from './styles';
 
 interface IProfileState {
+  username: string;
   name: string;
   isLoading: boolean;
 }
 
 const Profile: React.FC<IProfileState> = () => {
   const {user, signOutApp} = useAuth();
-  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  //profile data
+  const [username, setUserName] = useState('');
+  const [name, setName] = useState('');
+  const [document, setDocument] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [phone, setPhone] = useState('');
+  const [postalcode, setPostalcode] = useState('');
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -32,10 +42,18 @@ const Profile: React.FC<IProfileState> = () => {
       console.log("profile", profile)
 
       const people = profile.people;
+      const userProfile = profile.user;
+      const phone = profile.phones[0];
+      const address = profile.addresses[0];
 
-      const completeName = people[0].name + ' ' + people[0].last_name;
+      // set profile data
+      setUserName(userProfile.user)
+      setName(people.name + ' ' + people.last_name);
+      setDocument(people.document);
+      setBirthdate(convertDateTime(people.birth_date));
+      setPhone(phone.ddd + phone.phone)
+      setPostalcode(address.postal_code);
 
-      setName(completeName);
       setIsLoading(false);
     });
   }, []);
@@ -74,7 +92,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Usuário"
                     mode="flat"
-                    value={name}
+                    value={username}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -111,7 +129,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="CPF"
                     mode="flat"
-                    value={name}
+                    value={document}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -128,7 +146,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Data de nascimento"
                     mode="flat"
-                    value={name}
+                    value={birthdate}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -145,6 +163,43 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Telefone"
                     mode="flat"
+                    value={phone}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>        
+                <View style={styles.infoItem}>
+                  <Text style={styles.textInfo}>Endereço</Text>
+                </View>  
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="CEP"
+                    mode="flat"
+                    value={postalcode}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>  
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Cidade"
+                    mode="flat"
                     value={name}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
@@ -157,7 +212,73 @@ const Profile: React.FC<IProfileState> = () => {
                     }}
                     onChangeText={txt => setName(txt)}
                   />
-                </View>              
+                </View>  
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Estado"
+                    mode="flat"
+                    value={name}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>    
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Endereçp"
+                    mode="flat"
+                    value={name}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View> 
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Número"
+                    mode="flat"
+                    value={name}
+                    style={{flex:1, width: '100%', height: 50, alignSelf: 'center', marginTop: 10, backgroundColor: 'rgba(0, 0, 0, 0.05)'}}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                  <TextInput
+                    label="Complemeto"
+                    mode="flat"
+                    value={name}
+                    style={{flex:1, width: '100%', height: 50, alignSelf: 'center', marginTop: 10, backgroundColor: 'rgba(0, 0, 0, 0.05)', marginLeft: 10}}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>   
               </View>
               {/* {!disableInputs ? (
                 <TouchableOpacity

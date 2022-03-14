@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         alignSelf: 'center',
-        marginTop: 10,
+        marginTop: 15,
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
     },
     loadLogin: {
