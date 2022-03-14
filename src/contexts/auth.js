@@ -42,7 +42,6 @@ export const AuthProvider = ({children}) => {
             setUser(responseData.data.data);
             await AsyncStorage.setItem('@MagiaDoBrincar:user', JSON.stringify(responseData.data.data));
         }
-
     }
 
     function signOutApp() {
