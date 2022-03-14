@@ -43,15 +43,15 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'flex-start',
-        marginBottom: 10,
-        marginTop: 0,
+        marginBottom: 5,
+        marginTop: 15,
         paddingHorizontal: 0
     },
     profileText:{
         alignSelf: 'center',
         fontSize: 25,
         fontWeight: 'bold',
-        marginVertical: 15,
+        marginTop: 15,
         color: '#fff'
       },
     textInfo: {

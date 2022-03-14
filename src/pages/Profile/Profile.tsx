@@ -72,7 +72,7 @@ const Profile: React.FC<IProfileState> = () => {
                 </View>
                 <View style={styles.viewInputs}>
                   <TextInput
-                    label="Nome"
+                    label="Usuário"
                     mode="flat"
                     value={name}
                     style={styles.textInput}
@@ -86,7 +86,78 @@ const Profile: React.FC<IProfileState> = () => {
                     }}
                     onChangeText={txt => setName(txt)}
                   />
-                </View>                
+                </View>  
+                <View style={styles.infoItem}>
+                  <Text style={styles.textInfo}>Dados de registro</Text>
+                </View>
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Nome completo"
+                    mode="flat"
+                    value={name}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>  
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="CPF"
+                    mode="flat"
+                    value={name}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>  
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Data de nascimento"
+                    mode="flat"
+                    value={name}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View> 
+                <View style={styles.viewInputs}>
+                  <TextInput
+                    label="Telefone"
+                    mode="flat"
+                    value={name}
+                    style={styles.textInput}
+                    placeholderTextColor="steelblue"
+                    theme={{
+                      colors: { 
+                        primary: '#fff',
+                        placeholder: '#fff',
+                        text: '#fff',
+                      },
+                    }}
+                    onChangeText={txt => setName(txt)}
+                  />
+                </View>              
               </View>
               {/* {!disableInputs ? (
                 <TouchableOpacity
