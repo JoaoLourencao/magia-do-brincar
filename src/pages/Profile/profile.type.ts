@@ -39,6 +39,8 @@ export type Addresses = {
     public_place: string;
     district: string;
     city: string;
+    number: string;
     uf: string;
     complement: string;
+    description: string;
 }

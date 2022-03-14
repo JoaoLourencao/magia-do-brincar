@@ -1,14 +1,14 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
+  Alert, FlatList, SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { TextInput } from 'react-native-paper';
+import { Card, IconButton, TextInput } from 'react-native-paper';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
 import { convertDateTime } from '../../utils/index';
@@ -22,6 +22,57 @@ interface IProfileState {
 }
 
 const Profile: React.FC<IProfileState> = () => {
+  const renderItem = ({ item }) => {
+      return (
+          <Item 
+            addressdesc={item.description}
+            postalcode={item.postal_code}
+            city={item.city}
+            uf={item.uf}
+            number={item.number}
+            publicplace={item.public_place}
+            complement={item.complement}            
+            id={item.id}
+          />
+      )
+  }
+  const Item = ({ addressdesc, postalcode, city, uf, number, publicplace, complement, id }) => {
+    return (
+      <Card style={styles.cardAddress}>
+        <Card.Title
+          titleStyle={styles.cardTitle}
+          subtitleStyle={styles.cardSubTitle}
+          title={publicplace+', '+number}
+          subtitle={city+'/'+uf}
+          right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
+            Alert.alert(
+              publicplace+', '+number,
+              city+'/'+uf,
+              [
+                {
+                  text: 'Excluir',                
+                  onPress: () => console.log('Ask me later pressed')
+                },
+                {
+                  text: 'Cancelar',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel'
+                },
+                { text: 'Editar', onPress: () => console.log('OK Pressed') }
+              ],
+              { cancelable: false }
+            );
+          }} />}
+        />
+        <Card.Content>
+          <Text>{complement}</Text>
+        </Card.Content>
+        {/* <Card.Actions>
+          <Button>Editar</Button>
+        </Card.Actions> */}
+      </Card>        
+  )};
+
   const {user, signOutApp} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +83,13 @@ const Profile: React.FC<IProfileState> = () => {
   const [birthdate, setBirthdate] = useState('');
   const [phone, setPhone] = useState('');
   const [postalcode, setPostalcode] = useState('');
-
+  const [city, setCity] = useState('');
+  const [uf, setUf] = useState('');
+  const [publicplace, setPublicplace] = useState('');
+  const [number, setNumber] = useState('');
+  const [complement, setComplement] = useState('');
+  const [addressdesc, setAddressDesc] = useState('');
+  const [addresses, setAddresses] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,6 +110,13 @@ const Profile: React.FC<IProfileState> = () => {
       setBirthdate(convertDateTime(people.birth_date));
       setPhone(phone.ddd + phone.phone)
       setPostalcode(address.postal_code);
+      setCity(address.city);
+      setUf(address.uf);
+      setPublicplace(address.public_place);
+      setNumber(address.number);
+      setComplement(address.complement);
+      setAddressDesc(address.description);
+      setAddresses(profile.addresses);
 
       setIsLoading(false);
     });
@@ -177,9 +241,16 @@ const Profile: React.FC<IProfileState> = () => {
                   />
                 </View>        
                 <View style={styles.infoItem}>
-                  <Text style={styles.textInfo}>Endereço</Text>
-                </View>  
-                <View style={styles.viewInputs}>
+                  <Text style={styles.textInfo}>Endereços</Text>
+                </View> 
+
+                <FlatList
+                  data={addresses}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                />
+                                  
+                {/* <View style={styles.viewInputs}>
                   <TextInput
                     label="CEP"
                     mode="flat"
@@ -200,7 +271,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Cidade"
                     mode="flat"
-                    value={name}
+                    value={city}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -217,7 +288,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Estado"
                     mode="flat"
-                    value={name}
+                    value={uf}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -232,9 +303,9 @@ const Profile: React.FC<IProfileState> = () => {
                 </View>    
                 <View style={styles.viewInputs}>
                   <TextInput
-                    label="Endereçp"
+                    label="Endereço"
                     mode="flat"
-                    value={name}
+                    value={publicplace}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -251,7 +322,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Número"
                     mode="flat"
-                    value={name}
+                    value={number}
                     style={{flex:1, width: '100%', height: 50, alignSelf: 'center', marginTop: 10, backgroundColor: 'rgba(0, 0, 0, 0.05)'}}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -266,7 +337,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Complemeto"
                     mode="flat"
-                    value={name}
+                    value={complement}
                     style={{flex:1, width: '100%', height: 50, alignSelf: 'center', marginTop: 10, backgroundColor: 'rgba(0, 0, 0, 0.05)', marginLeft: 10}}
                     placeholderTextColor="steelblue"
                     theme={{
@@ -278,7 +349,7 @@ const Profile: React.FC<IProfileState> = () => {
                     }}
                     onChangeText={txt => setName(txt)}
                   />
-                </View>   
+                </View>    */}
               </View>
               {/* {!disableInputs ? (
                 <TouchableOpacity

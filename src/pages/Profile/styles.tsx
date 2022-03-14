@@ -66,6 +66,23 @@ const styles = StyleSheet.create({
         marginTop: 15,
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
     },
+    cardAddress: {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        color: '#fff',
+        padding: 0,
+        borderColor: 'rgba(0, 0, 0, 0.3)',
+        borderWidth: 1,
+        elevation: 0,
+        marginBottom:15
+    },
+    cardTitle:{
+        color: "#fff"
+    },
+    cardSubTitle:{
+        color: 'rgba(0, 0, 0, 0.5)',
+        fontWeight: 'bold',
+        fontSize: 15
+    },
     loadLogin: {
         marginTop: 85,
         marginBottom: 15,
