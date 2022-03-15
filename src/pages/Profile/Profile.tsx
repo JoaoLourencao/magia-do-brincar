@@ -14,6 +14,7 @@ import { useAuth } from '../../contexts/auth';
 import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
 import { styles } from './styles';
+import api from '../../services/apis'
 
 interface IProfileState {
   username: string;
@@ -81,48 +82,27 @@ const Profile: React.FC<IProfileState> = () => {
   const [name, setName] = useState('');
   const [document, setDocument] = useState('');
   const [birthdate, setBirthdate] = useState('');
-  const [phone, setPhone] = useState('');
-  const [postalcode, setPostalcode] = useState('');
-  const [city, setCity] = useState('');
-  const [uf, setUf] = useState('');
-  const [publicplace, setPublicplace] = useState('');
-  const [number, setNumber] = useState('');
-  const [complement, setComplement] = useState('');
-  const [addressdesc, setAddressDesc] = useState('');
+  const [phones, setPhones] = useState('');
   const [addresses, setAddresses] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
 
-    getProfile().then((profile: ProfileResponse) => {      
-
-      console.log("profile", profile)
+    getProfile().then(async (profile: ProfileResponse) => {      
 
       const people = profile.people;
       const userProfile = profile.user;
-      const phone = profile.phones[0];
-      const address = profile.addresses[0];
+
+      const addresses = (await api.get('/users/addresses')).data.data
+      const phones = (await api.get('/users/phones')).data.data
 
       // set profile data
       setUserName(userProfile.user)
       setName(people.name + ' ' + people.last_name);
       setDocument(people.document);
       setBirthdate(convertDateTime(people.birth_date));
-      if(phone){
-        setPhone(phone.ddd + phone.phone)
-      }
-
-      if(address){
-        setPostalcode(address.postal_code);
-        setCity(address.city);
-        setUf(address.uf);
-        setPublicplace(address.public_place);
-        setNumber(address.number);
-        setComplement(address.complement);
-        setAddressDesc(address.description);
-        setAddresses(profile.addresses);
-      }
-
+      setAddresses(addresses);
+      setPhones(phones);
       setIsLoading(false);
     });
   }, []);
@@ -232,7 +212,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Telefone"
                     mode="flat"
-                    value={phone}
+                    value={phones.length > 0 ? `${phones[0].ddd} ${phones[0].phone}` : null}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
