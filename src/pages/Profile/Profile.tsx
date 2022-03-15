@@ -1,16 +1,16 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
-  Alert, FlatList, SafeAreaView,
+  Alert, FlatList, NativeSyntheticEvent, SafeAreaView,
   ScrollView,
-  Text,
-  TouchableOpacity,
-  View
+  Text, TextInputEndEditingEventData, TouchableOpacity, View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Card, IconButton, TextInput } from 'react-native-paper';
+import TextInputMask from 'react-native-text-input-mask';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
+import { validateDocumentId } from '../../utils';
 import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
 import { styles } from './styles';
@@ -90,6 +90,17 @@ const Profile: React.FC<IProfileState> = () => {
   const [complement, setComplement] = useState('');
   const [addressdesc, setAddressDesc] = useState('');
   const [addresses, setAddresses] = useState(null);
+  const [maskPhone, setMaskphone] = useState('');
+
+  const checkDocumentId = (
+		documentId: NativeSyntheticEvent<TextInputEndEditingEventData>
+	) => {
+		if (documentId.nativeEvent.text)
+		if (!validateDocumentId(documentId.nativeEvent.text)){
+      setDocument("");
+			Alert.alert('Oops!', 'CPF inválido!');
+    }      
+	};
 
   useEffect(() => {
     setIsLoading(true);
@@ -109,7 +120,13 @@ const Profile: React.FC<IProfileState> = () => {
       setDocument(people.document);
       setBirthdate(convertDateTime(people.birth_date));
       if(phone){
-        setPhone(phone.ddd + phone.phone)
+        let phoneString = phone.ddd + phone.phone;
+        if(phoneString.length <= 10)
+          setMaskphone("([00]) [0000]-[0000]")
+        else
+          setMaskphone("([00]) [00000]-[0000]")
+
+        setPhone(phoneString)
       }
 
       if(address){
@@ -172,8 +189,8 @@ const Profile: React.FC<IProfileState> = () => {
                       },
                     }}
                     onChangeText={txt => setName(txt)}
-                  />
-                </View>  
+                  />                  
+                </View>                  
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Dados de registro</Text>
                 </View>
@@ -201,6 +218,13 @@ const Profile: React.FC<IProfileState> = () => {
                     value={document}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
+                    keyboardType="numeric"
+                    onEndEditing={(
+                      event: NativeSyntheticEvent<TextInputEndEditingEventData>
+                    ) => checkDocumentId(event)}
+                    render={(props) => (
+                      <TextInputMask {...props} mask="[000].[000].[000]-[00]" />
+                    )}
                     theme={{
                       colors: { 
                         primary: '#fff',
@@ -208,7 +232,7 @@ const Profile: React.FC<IProfileState> = () => {
                         text: '#fff',
                       },
                     }}
-                    onChangeText={txt => setName(txt)}
+                    onChangeText={(formatted: string) => setDocument(formatted)}
                   />
                 </View>  
                 <View style={styles.viewInputs}>
@@ -235,6 +259,10 @@ const Profile: React.FC<IProfileState> = () => {
                     value={phone}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
+				            keyboardType="phone-pad"
+                    render={(props) => (
+                      <TextInputMask {...props} mask={ maskPhone } />
+                    )}
                     theme={{
                       colors: { 
                         primary: '#fff',
@@ -242,7 +270,7 @@ const Profile: React.FC<IProfileState> = () => {
                         text: '#fff',
                       },
                     }}
-                    onChangeText={txt => setName(txt)}
+                    onChangeText={(formatted: string) => setPhone(formatted)}
                   />
                 </View>        
                 <View style={styles.infoItem}>
@@ -355,6 +383,13 @@ const Profile: React.FC<IProfileState> = () => {
                     onChangeText={txt => setName(txt)}
                   />
                 </View>    */}
+                 <TouchableOpacity
+                style={styles.buttonExit}
+                onPress={() => handleLogout()}
+                activeOpacity={0.75}
+                >
+                <Text style={styles.textButtonExit}>Sair</Text>
+              </TouchableOpacity>
               </View>
               {/* {!disableInputs ? (
                 <TouchableOpacity
@@ -373,14 +408,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <Text style={styles.textButtonMore}>Salvar</Text>
                 </TouchableOpacity>
               )} */}
-
-              <TouchableOpacity
-                style={styles.buttonExit}
-                onPress={() => handleLogout()}
-                activeOpacity={0.75}
-                >
-                <Text style={styles.textButtonExit}>Sair</Text>
-              </TouchableOpacity>
+             
             </View>
           )}
         </ScrollView>
