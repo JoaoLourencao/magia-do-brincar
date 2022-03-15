@@ -10,6 +10,7 @@ import { Card, IconButton, TextInput } from 'react-native-paper';
 import TextInputMask from 'react-native-text-input-mask';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
+import api from '../../services/apis';
 import { validateDocumentId } from '../../utils';
 import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
@@ -81,14 +82,7 @@ const Profile: React.FC<IProfileState> = () => {
   const [name, setName] = useState('');
   const [document, setDocument] = useState('');
   const [birthdate, setBirthdate] = useState('');
-  const [phone, setPhone] = useState('');
-  const [postalcode, setPostalcode] = useState('');
-  const [city, setCity] = useState('');
-  const [uf, setUf] = useState('');
-  const [publicplace, setPublicplace] = useState('');
-  const [number, setNumber] = useState('');
-  const [complement, setComplement] = useState('');
-  const [addressdesc, setAddressDesc] = useState('');
+  const [phones, setPhones] = useState('');
   const [addresses, setAddresses] = useState(null);
   const [maskPhone, setMaskphone] = useState('');
 
@@ -105,41 +99,21 @@ const Profile: React.FC<IProfileState> = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getProfile().then((profile: ProfileResponse) => {      
-
-      console.log("profile", profile)
+    getProfile().then(async (profile: ProfileResponse) => {      
 
       const people = profile.people;
       const userProfile = profile.user;
-      const phone = profile.phones[0];
-      const address = profile.addresses[0];
+
+      const addresses = (await api.get('/users/addresses')).data.data
+      const phones = (await api.get('/users/phones')).data.data
 
       // set profile data
       setUserName(userProfile.user)
       setName(people.name + ' ' + people.last_name);
       setDocument(people.document);
       setBirthdate(convertDateTime(people.birth_date));
-      if(phone){
-        let phoneString = phone.ddd + phone.phone;
-        if(phoneString.length <= 10)
-          setMaskphone("([00]) [0000]-[0000]")
-        else
-          setMaskphone("([00]) [00000]-[0000]")
-
-        setPhone(phoneString)
-      }
-
-      if(address){
-        setPostalcode(address.postal_code);
-        setCity(address.city);
-        setUf(address.uf);
-        setPublicplace(address.public_place);
-        setNumber(address.number);
-        setComplement(address.complement);
-        setAddressDesc(address.description);
-        setAddresses(profile.addresses);
-      }
-
+      setAddresses(addresses);
+      setPhones(phones);
       setIsLoading(false);
     });
   }, []);
@@ -256,7 +230,7 @@ const Profile: React.FC<IProfileState> = () => {
                   <TextInput
                     label="Telefone"
                     mode="flat"
-                    value={phone}
+                    value={phones.length > 0 ? `${phones[0].ddd} ${phones[0].phone}` : null}
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
 				            keyboardType="phone-pad"
@@ -282,107 +256,7 @@ const Profile: React.FC<IProfileState> = () => {
                   renderItem={renderItem}
                   keyExtractor={item => item.id}
                 />
-                                  
-                {/* <View style={styles.viewInputs}>
-                  <TextInput
-                    label="CEP"
-                    mode="flat"
-                    value={postalcode}
-                    style={styles.textInput}
-                    placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                </View>  
-                <View style={styles.viewInputs}>
-                  <TextInput
-                    label="Cidade"
-                    mode="flat"
-                    value={city}
-                    style={styles.textInput}
-                    placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                </View>  
-                <View style={styles.viewInputs}>
-                  <TextInput
-                    label="Estado"
-                    mode="flat"
-                    value={uf}
-                    style={styles.textInput}
-                    placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                </View>    
-                <View style={styles.viewInputs}>
-                  <TextInput
-                    label="Endereço"
-                    mode="flat"
-                    value={publicplace}
-                    style={styles.textInput}
-                    placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                </View> 
-                <View style={styles.viewInputs}>
-                  <TextInput
-                    label="Número"
-                    mode="flat"
-                    value={number}
-                    style={{flex:1, width: '100%', height: 50, alignSelf: 'center', marginTop: 10, backgroundColor: 'rgba(0, 0, 0, 0.05)'}}
-                    placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                  <TextInput
-                    label="Complemeto"
-                    mode="flat"
-                    value={complement}
-                    style={{flex:1, width: '100%', height: 50, alignSelf: 'center', marginTop: 10, backgroundColor: 'rgba(0, 0, 0, 0.05)', marginLeft: 10}}
-                    placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                </View>    */}
+                                                
                  <TouchableOpacity
                 style={styles.buttonExit}
                 onPress={() => handleLogout()}
