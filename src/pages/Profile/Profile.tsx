@@ -40,37 +40,71 @@ const Profile: React.FC<IProfileState> = () => {
   const Item = ({ addressdesc, postalcode, city, uf, number, publicplace, complement, id }) => {
     return (
       <Card style={styles.cardAddress}>
-        <Card.Title
-          titleStyle={styles.cardTitle}
-          subtitleStyle={styles.cardSubTitle}
-          title={publicplace+', '+number}
-          subtitle={city+'/'+uf}
-          right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
-            Alert.alert(
-              publicplace+', '+number,
-              city+'/'+uf,
-              [
-                {
-                  text: 'Excluir',                
-                  onPress: () => console.log('Ask me later pressed')
-                },
-                {
-                  text: 'Cancelar',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel'
-                },
-                { text: 'Editar', onPress: () => console.log('OK Pressed') }
-              ],
-              { cancelable: false }
-            );
-          }} />}
-        />
-        <Card.Content>
-          <Text>{complement}</Text>
-        </Card.Content>
-        {/* <Card.Actions>
-          <Button>Editar</Button>
-        </Card.Actions> */}
+        { addressdesc ? (
+          <>
+          <Card.Title
+            titleStyle={styles.cardTitle}
+            subtitleStyle={styles.cardSubTitle}
+            title={addressdesc}
+            subtitle={publicplace+', '+number}
+            right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
+              Alert.alert(
+                publicplace+', '+number,
+                city+'/'+uf,
+                [
+                  {
+                    text: 'Excluir',                
+                    onPress: () => console.log('Ask me later pressed')
+                  },
+                  {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                  },
+                  { text: 'Editar', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+              );
+            }} />}
+            />
+            <Card.Content>            
+              <Text>{city+'/'+uf}</Text>
+              <Text style={{marginBottom: 15}}>{complement}</Text>
+            </Card.Content>
+          </>
+        ) : (
+          <>
+            <Card.Title
+              titleStyle={styles.cardTitle}
+              subtitleStyle={styles.cardSubTitle}
+              title={publicplace+', '+number}
+              subtitle={city+'/'+uf}
+              right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
+                Alert.alert(
+                  publicplace+', '+number,
+                  city+'/'+uf,
+                  [
+                    {
+                      text: 'Excluir',                
+                      onPress: () => console.log('Ask me later pressed')
+                    },
+                    {
+                      text: 'Cancelar',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel'
+                    },
+                    { text: 'Editar', onPress: () => console.log('OK Pressed') }
+                  ],
+                  { cancelable: false }
+                );
+              }} />}
+            />
+            <Card.Content>
+              <Text style={{marginBottom: 15}}>{complement}</Text>
+            </Card.Content>
+          </>
+        )
+        }        
       </Card>        
   )};
 
@@ -106,6 +140,8 @@ const Profile: React.FC<IProfileState> = () => {
 
       const addresses = (await api.get('/users/addresses')).data.data
       const phones = (await api.get('/users/phones')).data.data
+
+      console.log(addresses)
 
       // set profile data
       setUserName(userProfile.user)
