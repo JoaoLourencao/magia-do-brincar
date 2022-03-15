@@ -33,6 +33,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     async function signIn(email, password) {
+
         const responseData = await api.post('/login', {user: email, password});
 
         if(!responseData) {
@@ -42,6 +43,7 @@ export const AuthProvider = ({children}) => {
             setUser(responseData.data.data);
             await AsyncStorage.setItem('@MagiaDoBrincar:user', JSON.stringify(responseData.data.data));
         }
+
     }
 
     function signOutApp() {

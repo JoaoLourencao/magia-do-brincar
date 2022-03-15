@@ -37,7 +37,7 @@ const Login = ({navigation}) => {
           setIsLoading(false);
         })
         .catch(error => {
-          Alert.alert('Oops!', JSON.stringify(error.message));
+          Alert.alert('Oops!', error.response.data.data);
           setIsLoading(false);
         });
     }
