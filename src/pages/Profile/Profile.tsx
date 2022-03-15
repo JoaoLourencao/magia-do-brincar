@@ -141,8 +141,6 @@ const Profile: React.FC<IProfileState> = () => {
       const addresses = (await api.get('/users/addresses')).data.data
       const phones = (await api.get('/users/phones')).data.data
 
-      console.log(addresses)
-
       // set profile data
       setUserName(userProfile.user)
       setName(people.name + ' ' + people.last_name);
