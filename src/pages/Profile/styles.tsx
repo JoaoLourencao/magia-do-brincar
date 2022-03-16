@@ -75,6 +75,17 @@ const styles = StyleSheet.create({
         elevation: 0,
         marginBottom:15
     },
+    viewEdit:{
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        position: 'absolute', 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        height: 130,
+        paddingHorizontal: 20
+    },
     cardTitle:{
         color: "#fff"
     },
@@ -118,11 +129,28 @@ const styles = StyleSheet.create({
 		borderRadius: 100,        
     },
 
+    buttonEdit: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        alignItems: 'center',
+        paddingVertical: 15,
+        marginVertical: 15,
+        width: '100%',
+        height: 50,
+		borderRadius: 100,
+    },
+    textbuttonEdit:{
+        color:'rgba(255, 255, 255, 1)',
+        fontWeight:'bold'
+    },
+    txtBtnCancel:{
+        color: '#ff0000'
+    },
     buttonExit: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         alignItems: 'center',
         paddingVertical: 15,
-        marginVertical: 20,
+        marginTop: 10,
+        marginBottom: 150,
         width: '100%',
         height: 50,
 		borderRadius: 100,
@@ -145,17 +173,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         justifyContent: 'center',
         marginTop: 20,
-    },
-    buttonEdit: {
-        marginTop: 40,
-        width: '90%',
-        height: 45,
-        alignSelf: 'center',
-        backgroundColor: "#FFF",
-        borderWidth: 1,
-        borderColor: '#211F20',
-        justifyContent: 'center',
-    },
+    },    
     buttonEditLabel: {
         color: '#211F20',
     }

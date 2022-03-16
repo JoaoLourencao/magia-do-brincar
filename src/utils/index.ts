@@ -9,6 +9,19 @@ export const isEmptyOrSpaces = (str?: string): boolean => {
 };
 
 /**
+ * Valida se uma string está vazia ou preenchida com espaços em branco
+ * @param {string} str String para análise
+ */
+ export const formatPhone = (str?: string): string => {
+	const regex = /^([0-9]{2})([0-9]{4,5})([0-9]{4})$/;
+	var string = str?.replace(/[^0-9]/g, "").slice(0, 11);
+
+	const result = string?.replace(regex, "($1) $2-$3");
+
+	return result!;
+};
+
+/**
  * Valida se uma string está em formato de email
  * @param {string} email String para análise
  */
