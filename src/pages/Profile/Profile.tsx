@@ -11,7 +11,7 @@ import TextInputMask from 'react-native-text-input-mask';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/apis';
-import { validateDocumentId } from '../../utils';
+import { formatPhone, validateDocumentId } from '../../utils';
 import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
 import { styles } from './styles';
@@ -26,8 +26,7 @@ const Profile: React.FC<IProfileState> = () => {
   const renderItem = ({ item }) => {
       return (
           <Item 
-            addressdesc={item.description}
-            postalcode={item.postal_code}
+            addressdesc={item.description}            
             city={item.city}
             uf={item.uf}
             number={item.number}
@@ -37,7 +36,87 @@ const Profile: React.FC<IProfileState> = () => {
           />
       )
   }
-  const Item = ({ addressdesc, postalcode, city, uf, number, publicplace, complement, id }) => {
+
+  const renderPhones = ({ item }) => {
+      return (
+          <ItemPhone             
+            type={item.type}
+            phone={item.phone}
+            ddd={item.ddd}            
+            id={item.id}
+            descPhone={item.description}
+          />
+      )
+  }
+
+  const ItemPhone = ({ type, phone, ddd, id, descPhone }) => {
+    return (
+      <Card style={styles.cardAddress}>
+        {descPhone ? (
+          <>
+          <Card.Title
+            titleStyle={styles.cardTitle}
+            subtitleStyle={styles.cardSubTitle}
+            title={descPhone}
+            style={{marginBottom: 5}}
+            subtitle={type}
+            right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
+              Alert.alert(
+                type,
+                formatPhone(ddd+phone),
+                [
+                  {
+                    text: 'Excluir',                
+                    onPress: () => console.log('Ask me later pressed')
+                  },
+                  {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                  },
+                  { text: 'Editar', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+              );
+            }} />}
+            />   
+            <Card.Content>            
+              <Text style={{marginBottom: 15}}>{formatPhone(ddd+phone)}</Text>
+            </Card.Content>
+            </> 
+        ):(
+          <Card.Title
+            titleStyle={styles.cardTitle}
+            subtitleStyle={styles.cardSubTitle}
+            title={type}
+            style={{marginBottom: 5}}
+            subtitle={formatPhone(ddd+phone)}
+            right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
+              Alert.alert(
+                type,
+                formatPhone(ddd+phone),
+                [
+                  {
+                    text: 'Excluir',                
+                    onPress: () => console.log('Ask me later pressed')
+                  },
+                  {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                  },
+                  { text: 'Editar', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+              );
+            }} />}
+            />              
+          )
+        }                 
+      </Card>        
+  )};
+
+  const Item = ({ addressdesc, city, uf, number, publicplace, complement, id }) => {
     return (
       <Card style={styles.cardAddress}>
         { addressdesc ? (
@@ -118,8 +197,9 @@ const Profile: React.FC<IProfileState> = () => {
   const [birthdate, setBirthdate] = useState('');
   const [phones, setPhones] = useState('');
   const [addresses, setAddresses] = useState(null);
-  const [maskPhone, setMaskphone] = useState('');
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [keyboardEnable, setKeyboardEnable] = useState(false);
+  
   const checkDocumentId = (
 		documentId: NativeSyntheticEvent<TextInputEndEditingEventData>
 	) => {
@@ -131,6 +211,16 @@ const Profile: React.FC<IProfileState> = () => {
 	};
 
   useEffect(() => {
+    bindProfileData();    
+  }, []);
+
+  async function getProfile() : Promise<ProfileResponse> {
+    let profile = await AsyncStorage.getItem('@MagiaDoBrincar:user');
+
+    return JSON.parse(profile!);
+  }
+
+  function bindProfileData() {
     setIsLoading(true);
 
     getProfile().then(async (profile: ProfileResponse) => {      
@@ -150,12 +240,6 @@ const Profile: React.FC<IProfileState> = () => {
       setPhones(phones);
       setIsLoading(false);
     });
-  }, []);
-
-  async function getProfile() : Promise<ProfileResponse> {
-    let profile = await AsyncStorage.getItem('@MagiaDoBrincar:user');
-
-    return JSON.parse(profile!);
   }
 
   const handleLogout = () => {
@@ -196,7 +280,7 @@ const Profile: React.FC<IProfileState> = () => {
                         text: '#fff',
                       },
                     }}
-                    onChangeText={txt => setName(txt)}
+                    disabled
                   />                  
                 </View>                  
                 <View style={styles.infoItem}>
@@ -216,7 +300,14 @@ const Profile: React.FC<IProfileState> = () => {
                         text: '#fff',
                       },
                     }}
-                    onChangeText={txt => setName(txt)}
+                    onFocus ={() => {
+                      setKeyboardEnable(true);
+                    }}
+                    onChangeText={txt => {
+                      setName(txt);
+                      setIsEditing(true);
+                    }}
+                    onEndEditing={() => setKeyboardEnable(false)}
                   />
                 </View>  
                 <View style={styles.viewInputs}>
@@ -229,7 +320,10 @@ const Profile: React.FC<IProfileState> = () => {
                     keyboardType="numeric"
                     onEndEditing={(
                       event: NativeSyntheticEvent<TextInputEndEditingEventData>
-                    ) => checkDocumentId(event)}
+                    ) => {
+                      checkDocumentId(event);
+                      setKeyboardEnable(false);
+                    }}
                     render={(props) => (
                       <TextInputMask {...props} mask="[000].[000].[000]-[00]" />
                     )}
@@ -240,7 +334,14 @@ const Profile: React.FC<IProfileState> = () => {
                         text: '#fff',
                       },
                     }}
-                    onChangeText={(formatted: string) => setDocument(formatted)}
+                    onFocus ={() => {
+                      setKeyboardEnable(true);
+                    }}
+                    onChangeText={(formatted: string) => {
+                      setDocument(formatted);
+                      setIsEditing(true);
+                    }}
+
                   />
                 </View>  
                 <View style={styles.viewInputs}>
@@ -249,27 +350,10 @@ const Profile: React.FC<IProfileState> = () => {
                     mode="flat"
                     value={birthdate}
                     style={styles.textInput}
+                    keyboardType="numeric"
                     placeholderTextColor="steelblue"
-                    theme={{
-                      colors: { 
-                        primary: '#fff',
-                        placeholder: '#fff',
-                        text: '#fff',
-                      },
-                    }}
-                    onChangeText={txt => setName(txt)}
-                  />
-                </View> 
-                <View style={styles.viewInputs}>
-                  <TextInput
-                    label="Telefone"
-                    mode="flat"
-                    value={phones.length > 0 ? `${phones[0].ddd} ${phones[0].phone}` : null}
-                    style={styles.textInput}
-                    placeholderTextColor="steelblue"
-				            keyboardType="phone-pad"
                     render={(props) => (
-                      <TextInputMask {...props} mask={ maskPhone } />
+                      <TextInputMask {...props} mask="[00]/[00]/[0000]" />
                     )}
                     theme={{
                       colors: { 
@@ -278,12 +362,31 @@ const Profile: React.FC<IProfileState> = () => {
                         text: '#fff',
                       },
                     }}
-                    onChangeText={(formatted: string) => setPhone(formatted)}
+                    onFocus ={() => {
+                      setKeyboardEnable(true);
+                    }}
+                    onChangeText={(formatted: string) => {
+                      setBirthdate(formatted);
+                      setIsEditing(true);
+                    }}
+                    onEndEditing={() => setKeyboardEnable(false)}
+
                   />
-                </View>        
+                </View> 
+                
+                <View style={styles.infoItem}>
+                  <Text style={styles.textInfo}>Telefones</Text>
+                </View>
+
+                <FlatList
+                  data={phones}
+                  renderItem={renderPhones}
+                  keyExtractor={item => item.id}
+                />
+
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Endereços</Text>
-                </View> 
+                </View>                
 
                 <FlatList
                   data={addresses}
@@ -291,36 +394,39 @@ const Profile: React.FC<IProfileState> = () => {
                   keyExtractor={item => item.id}
                 />
                                                 
-                 <TouchableOpacity
-                style={styles.buttonExit}
-                onPress={() => handleLogout()}
-                activeOpacity={0.75}
+              <TouchableOpacity
+                  style={styles.buttonExit}
+                  onPress={() => handleLogout()}
+                  activeOpacity={0.75}
                 >
                 <Text style={styles.textButtonExit}>Sair</Text>
               </TouchableOpacity>
-              </View>
-              {/* {!disableInputs ? (
-                <TouchableOpacity
-                  style={styles.buttonMore}
-                  onPress={() => enableInputs()}
-                  activeOpacity={0.75}
-                  >
-                  <Text style={styles.textButtonMore}>Editar</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.buttonMore}
-                  onPress={() => saveData()}
-                  activeOpacity={0.75}
-                  >
-                  <Text style={styles.textButtonMore}>Salvar</Text>
-                </TouchableOpacity>
-              )} */}
-             
+              </View>           
             </View>
-          )}
-        </ScrollView>
+          )}          
+        </ScrollView>        
       </LinearGradient>
+      {isEditing && !keyboardEnable ? (
+           <View style={styles.viewEdit}>
+            <TouchableOpacity
+                style={styles.buttonEdit}
+                onPress={() => handleLogout()}
+                activeOpacity={0.75}
+              >
+              <Text style={styles.textbuttonEdit}>Salvar Alterações</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            onPress={() => {
+              bindProfileData();
+              setIsEditing(false);
+            }}
+            >
+              <Text style={styles.txtBtnCancel}>Cancelar</Text>
+            </TouchableOpacity>
+          </View> 
+        ):(
+          <></>
+        )}      
     </SafeAreaView>
   );
 };
