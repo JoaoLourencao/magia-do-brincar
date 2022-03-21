@@ -18,6 +18,7 @@ export type User = {
 }
 
 export type People = {
+    id: number;
     name: string;
     last_name: string;
     document: string;

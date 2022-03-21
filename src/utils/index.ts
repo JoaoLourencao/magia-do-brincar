@@ -57,6 +57,8 @@ export const validateDocumentId = (documentId: string): boolean => {
 		return false;
 	}
 
+	return true
+
 	for (let i = 1; i <= 9; i++)
 		check = check + parseInt(document.substring(i - 1, i)) * (11 - i);
 	rest = (check * 10) % 11;
@@ -88,6 +90,15 @@ export const returnOnlyNumbers = (stringToStrip: string): string => {
  * Formata data
  * @param {string} date
  */
- export const convertDateTime = (date: string): string => {
+export const convertDateTime = (date: string): string => {
     return date ? moment(date).format('DD/MM/YYYY') : null;
 }
+
+/**
+ * Formata data
+ * @param {string} date
+ */
+export const convertDateBrazil = (date: string): string => {
+    return date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : null;
+}
+

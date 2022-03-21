@@ -11,7 +11,7 @@ import TextInputMask from 'react-native-text-input-mask';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
 import api from '../../services/apis';
-import { formatPhone, validateDocumentId } from '../../utils';
+import { formatPhone, validateDocumentId, returnOnlyNumbers, convertDateBrazil } from '../../utils';
 import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
 import { styles } from './styles';
@@ -195,8 +195,8 @@ const Profile: React.FC<IProfileState> = () => {
   const [name, setName] = useState('');
   const [document, setDocument] = useState('');
   const [birthdate, setBirthdate] = useState('');
-  const [phones, setPhones] = useState('');
-  const [addresses, setAddresses] = useState(null);
+  const [phones, setPhones] = useState([]);
+  const [addresses, setAddresses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [keyboardEnable, setKeyboardEnable] = useState(false);
   
@@ -245,6 +245,22 @@ const Profile: React.FC<IProfileState> = () => {
   const handleLogout = () => {
     signOutApp();
   };
+
+  const saveEditionsPeople = async () => {
+    let people_edit = (await getProfile()).people
+    people_edit.name = name.split(' ')[0]
+    people_edit.last_name = name.substring(name.indexOf(' ') > -1 ? name.indexOf(' ') + 1 : 0, name.length)
+    people_edit.document = returnOnlyNumbers(document)
+    people_edit.birth_date = convertDateBrazil(birthdate)
+    
+    try{
+      let save = (await api.put(`/peoples/${people_edit.id}`, people_edit)).data
+      console.log(save.data)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -374,9 +390,11 @@ const Profile: React.FC<IProfileState> = () => {
                   />
                 </View> 
                 
-                <View style={styles.infoItem}>
-                  <Text style={styles.textInfo}>Telefones</Text>
-                </View>
+                {phones && phones.length > 0 && 
+                  <View style={styles.infoItem}>
+                    <Text style={styles.textInfo}>Telefones</Text>
+                  </View>
+                }
 
                 <FlatList
                   data={phones}
@@ -384,9 +402,11 @@ const Profile: React.FC<IProfileState> = () => {
                   keyExtractor={item => item.id}
                 />
 
-                <View style={styles.infoItem}>
-                  <Text style={styles.textInfo}>Endereços</Text>
-                </View>                
+                {addresses && addresses.length > 0 && 
+                  <View style={styles.infoItem}>
+                    <Text style={styles.textInfo}>Endereços</Text>
+                  </View>    
+                }            
 
                 <FlatList
                   data={addresses}
@@ -410,7 +430,7 @@ const Profile: React.FC<IProfileState> = () => {
            <View style={styles.viewEdit}>
             <TouchableOpacity
                 style={styles.buttonEdit}
-                onPress={() => handleLogout()}
+                onPress={() => saveEditionsPeople()}
                 activeOpacity={0.75}
               >
               <Text style={styles.textbuttonEdit}>Salvar Alterações</Text>
