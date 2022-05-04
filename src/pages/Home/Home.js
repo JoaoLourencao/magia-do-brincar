@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, SafeAreaView, ScrollView, ImageBackground, Text, TouchableOpacity} from 'react-native';
-import { Button } from 'react-native-paper';
-import {styles} from './styles';
-import Agendamento from '../../assets/img/calendario.jpg';
-import Servicos from '../../assets/img/servicos.jpg';
-import Duvidas from '../../assets/img/duvidas.jpg';
+import { ImageBackground, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { Button } from 'react-native-paper';
+import Agendamento from '../../assets/img/calendario.jpg';
+import Duvidas from '../../assets/img/duvidas.jpg';
+import Servicos from '../../assets/img/servicos.jpg';
+import { styles } from './styles';
 
 const Home = ({navigation}) => {
     
@@ -26,7 +26,6 @@ const Home = ({navigation}) => {
             idService: id
         })
     };
-    
 
     return (
         

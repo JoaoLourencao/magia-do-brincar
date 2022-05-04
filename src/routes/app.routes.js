@@ -1,8 +1,9 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useCart} from '../contexts/cart';
+import { useCart } from '../contexts/cart';
+import AddorUpdatePhone from '../pages/AddorUpdatePhone';
 import Cart from '../pages/Cart';
 import DetailService from '../pages/DetailService';
 import History from '../pages/History';
@@ -44,6 +45,15 @@ const CartStackScreen = () => {
   );
 };
 
+const ProfileStackScreen = () => {
+  return (
+    <CartStack.Navigator screenOptions={{headerShown: false}}>
+      <CartStack.Screen name="Perfil" component={Profile} />
+      <CartStack.Screen name="AddorUpdatePhone" component={AddorUpdatePhone} />
+    </CartStack.Navigator>
+  );
+};
+
 const AppRoutes = () => {
   const {lengthItens} = useCart();
   return (
@@ -79,7 +89,7 @@ const AppRoutes = () => {
       />
       <Tab.Screen name="Serviços" component={PageServiceStackScreen} />
       {/* <Tab.Screen name="Contato" component={Contact} /> */}
-      <Tab.Screen name="Perfil" component={Profile} />
+      <Tab.Screen name="Perfil" component={ProfileStackScreen} />
     </Tab.Navigator>
   );
 };
