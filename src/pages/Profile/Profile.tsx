@@ -1,9 +1,13 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
-  Alert, FlatList, NativeSyntheticEvent, SafeAreaView,
+  Alert,
+  FlatList, NativeSyntheticEvent, SafeAreaView,
   ScrollView,
-  Text, TextInputEndEditingEventData, TouchableOpacity, View
+  Text,
+  TextInputEndEditingEventData,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Card, IconButton, TextInput } from 'react-native-paper';
@@ -22,132 +26,169 @@ interface IProfileState {
   isLoading: boolean;
 }
 
-const Profile: React.FC<IProfileState> = () => {
-  const renderItem = ({ item }) => {
-      return (
-          <Item 
-            addressdesc={item.description}            
-            city={item.city}
-            uf={item.uf}
-            number={item.number}
-            publicplace={item.public_place}
-            complement={item.complement}            
-            id={item.id}
-          />
-      )
-  }
+const Profile: React.FC<IProfileState> = ({navigation}) => {
+  const renderItem = ({item}) => {
+    return (
+      <Item
+        addressdesc={item.description}
+        city={item.city}
+        uf={item.uf}
+        number={item.number}
+        publicplace={item.public_place}
+        complement={item.complement}
+        id={item.id}
+      />
+    );
+  };
 
-  const renderPhones = ({ item }) => {
-      return (
-          <ItemPhone             
-            type={item.type}
-            phone={item.phone}
-            ddd={item.ddd}            
-            id={item.id}
-            descPhone={item.description}
-          />
-      )
-  }
+  const renderPhones = ({item}) => {
+    return (
+      <ItemPhone
+        type={item.type}
+        phone={item.phone}
+        ddd={item.ddd}
+        id={item.id}
+        descPhone={item.description}
+      />
+    );
+  };
 
-  const ItemPhone = ({ type, phone, ddd, id, descPhone }) => {
+  const ItemPhone = ({type, phone, ddd, id, descPhone}) => {
     return (
       <Card style={styles.cardAddress}>
         {descPhone ? (
           <>
-          <Card.Title
-            titleStyle={styles.cardTitle}
-            subtitleStyle={styles.cardSubTitle}
-            title={descPhone}
-            style={{marginBottom: 5}}
-            subtitle={type}
-            right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
-              Alert.alert(
-                type,
-                formatPhone(ddd+phone),
-                [
-                  {
-                    text: 'Excluir',                
-                    onPress: () => console.log('Ask me later pressed')
-                  },
-                  {
-                    text: 'Cancelar',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel'
-                  },
-                  { text: 'Editar', onPress: () => console.log('OK Pressed') }
-                ],
-                { cancelable: false }
-              );
-            }} />}
-            />   
-            <Card.Content>            
-              <Text style={{marginBottom: 15}}>{formatPhone(ddd+phone)}</Text>
+            <Card.Title
+              titleStyle={styles.cardTitle}
+              subtitleStyle={styles.cardSubTitle}
+              title={descPhone}
+              style={{marginBottom: 5}}
+              subtitle={type}
+              right={props => (
+                <IconButton
+                  color="white"
+                  {...props}
+                  icon="dots-vertical"
+                  onPress={() => {
+                    Alert.alert(
+                      type,
+                      formatPhone(ddd + phone),
+                      [
+                        {
+                          text: 'Excluir',
+                          onPress: () => console.log('Ask me later pressed'),
+                        },
+                        {
+                          text: 'Cancelar',
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Editar',
+                          onPress: () => console.log('OK Pressed'),
+                        },
+                      ],
+                      {cancelable: false}
+                    );
+                  }}
+                />
+              )}
+            />
+            <Card.Content>
+              <Text style={{marginBottom: 15}}>{formatPhone(ddd + phone)}</Text>
             </Card.Content>
-            </> 
-        ):(
+          </>
+        ) : (
           <Card.Title
             titleStyle={styles.cardTitle}
             subtitleStyle={styles.cardSubTitle}
             title={type}
             style={{marginBottom: 5}}
-            subtitle={formatPhone(ddd+phone)}
-            right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
-              Alert.alert(
-                type,
-                formatPhone(ddd+phone),
-                [
-                  {
-                    text: 'Excluir',                
-                    onPress: () => console.log('Ask me later pressed')
-                  },
-                  {
-                    text: 'Cancelar',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel'
-                  },
-                  { text: 'Editar', onPress: () => console.log('OK Pressed') }
-                ],
-                { cancelable: false }
-              );
-            }} />}
-            />              
-          )
-        }                 
-      </Card>        
-  )};
+            subtitle={formatPhone(ddd + phone)}
+            right={props => (
+              <IconButton
+                color="white"
+                {...props}
+                icon="dots-vertical"
+                onPress={() => {
+                  Alert.alert(
+                    type,
+                    formatPhone(ddd + phone),
+                    [
+                      {
+                        text: 'Excluir',
+                        onPress: () => console.log('Ask me later pressed'),
+                      },
+                      {
+                        text: 'Cancelar',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Editar',
+                        onPress: () => console.log('OK Pressed'),
+                      },
+                    ],
+                    {cancelable: false}
+                  );
+                }}
+              />
+            )}
+          />
+        )}
+      </Card>
+    );
+  };
 
-  const Item = ({ addressdesc, city, uf, number, publicplace, complement, id }) => {
+  const Item = ({
+    addressdesc,
+    city,
+    uf,
+    number,
+    publicplace,
+    complement,
+    id,
+  }) => {
     return (
       <Card style={styles.cardAddress}>
-        { addressdesc ? (
+        {addressdesc ? (
           <>
-          <Card.Title
-            titleStyle={styles.cardTitle}
-            subtitleStyle={styles.cardSubTitle}
-            title={addressdesc}
-            subtitle={publicplace+', '+number}
-            right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
-              Alert.alert(
-                publicplace+', '+number,
-                city+'/'+uf,
-                [
-                  {
-                    text: 'Excluir',                
-                    onPress: () => console.log('Ask me later pressed')
-                  },
-                  {
-                    text: 'Cancelar',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel'
-                  },
-                  { text: 'Editar', onPress: () => console.log('OK Pressed') }
-                ],
-                { cancelable: false }
-              );
-            }} />}
+            <Card.Title
+              titleStyle={styles.cardTitle}
+              subtitleStyle={styles.cardSubTitle}
+              title={addressdesc}
+              subtitle={publicplace + ', ' + number}
+              right={props => (
+                <IconButton
+                  color="white"
+                  {...props}
+                  icon="dots-vertical"
+                  onPress={() => {
+                    Alert.alert(
+                      publicplace + ', ' + number,
+                      city + '/' + uf,
+                      [
+                        {
+                          text: 'Excluir',
+                          onPress: () => console.log('Ask me later pressed'),
+                        },
+                        {
+                          text: 'Cancelar',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Editar',
+                          onPress: () => console.log('OK Pressed'),
+                        },
+                      ],
+                      {cancelable: false}
+                    );
+                  }}
+                />
+              )}
             />
-            <Card.Content>            
-              <Text>{city+'/'+uf}</Text>
+            <Card.Content>
+              <Text>{city + '/' + uf}</Text>
               <Text style={{marginBottom: 15}}>{complement}</Text>
             </Card.Content>
           </>
@@ -156,36 +197,46 @@ const Profile: React.FC<IProfileState> = () => {
             <Card.Title
               titleStyle={styles.cardTitle}
               subtitleStyle={styles.cardSubTitle}
-              title={publicplace+', '+number}
-              subtitle={city+'/'+uf}
-              right={(props) => <IconButton color='white' {...props} icon="dots-vertical" onPress={() => {
-                Alert.alert(
-                  publicplace+', '+number,
-                  city+'/'+uf,
-                  [
-                    {
-                      text: 'Excluir',                
-                      onPress: () => console.log('Ask me later pressed')
-                    },
-                    {
-                      text: 'Cancelar',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel'
-                    },
-                    { text: 'Editar', onPress: () => console.log('OK Pressed') }
-                  ],
-                  { cancelable: false }
-                );
-              }} />}
+              title={publicplace + ', ' + number}
+              subtitle={city + '/' + uf}
+              right={props => (
+                <IconButton
+                  color="white"
+                  {...props}
+                  icon="dots-vertical"
+                  onPress={() => {
+                    Alert.alert(
+                      publicplace + ', ' + number,
+                      city + '/' + uf,
+                      [
+                        {
+                          text: 'Excluir',
+                          onPress: () => console.log('Ask me later pressed'),
+                        },
+                        {
+                          text: 'Cancelar',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Editar',
+                          onPress: () => console.log('OK Pressed'),
+                        },
+                      ],
+                      {cancelable: false}
+                    );
+                  }}
+                />
+              )}
             />
             <Card.Content>
               <Text style={{marginBottom: 15}}>{complement}</Text>
             </Card.Content>
           </>
-        )
-        }        
-      </Card>        
-  )};
+        )}
+      </Card>
+    );
+  };
 
   const {user, signOutApp} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -199,40 +250,43 @@ const Profile: React.FC<IProfileState> = () => {
   const [addresses, setAddresses] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [keyboardEnable, setKeyboardEnable] = useState(false);
-  
+
   const checkDocumentId = (
-		documentId: NativeSyntheticEvent<TextInputEndEditingEventData>
-	) => {
-		if (documentId.nativeEvent.text)
-		if (!validateDocumentId(documentId.nativeEvent.text)){
-      setDocument("");
-			Alert.alert('Oops!', 'CPF inválido!');
-    }      
-	};
+    documentId: NativeSyntheticEvent<TextInputEndEditingEventData>
+  ) => {
+    if (documentId.nativeEvent.text)
+      if (!validateDocumentId(documentId.nativeEvent.text)) {
+        setDocument('');
+        Alert.alert('Oops!', 'CPF inválido!');
+      }
+  };
 
   useEffect(() => {
-    bindProfileData();    
+    bindProfileData();
   }, []);
 
-  async function getProfile() : Promise<ProfileResponse> {
+  async function getProfile(): Promise<ProfileResponse> {
     let profile = await AsyncStorage.getItem('@MagiaDoBrincar:user');
 
     return JSON.parse(profile!);
   }
 
+  const goAddorUpdatePhone = () => {
+      navigation.navigate('AddorUpdatePhone');
+  };
+
   function bindProfileData() {
     setIsLoading(true);
 
-    getProfile().then(async (profile: ProfileResponse) => {      
-
+    getProfile().then(async (profile: ProfileResponse) => {
       const people = profile.people;
       const userProfile = profile.user;
 
-      const addresses = (await api.get('/users/addresses')).data.data
-      const phones = (await api.get('/users/phones')).data.data
+      const addresses = (await api.get('/users/addresses')).data.data;
+      const phones = (await api.get('/users/phones')).data.data;
 
       // set profile data
-      setUserName(userProfile.user)
+      setUserName(userProfile.user);
       setName(people.name + ' ' + people.last_name);
       setDocument(people.document);
       setBirthdate(convertDateTime(people.birth_date));
@@ -241,6 +295,10 @@ const Profile: React.FC<IProfileState> = () => {
       setIsLoading(false);
     });
   }
+
+  const addAddress = () => {
+    
+  };
 
   const handleLogout = () => {
     signOutApp();
@@ -261,7 +319,7 @@ const Profile: React.FC<IProfileState> = () => {
               <Loading isLoading={isLoading} />
             </View>
           ) : (
-            <View style={styles.viewProfile}>
+            <View style={styles.viewProfile}>           
               <View style={styles.gridInfo}>
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Acesso</Text>
@@ -274,15 +332,15 @@ const Profile: React.FC<IProfileState> = () => {
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
-                      colors: { 
+                      colors: {
                         primary: '#fff',
                         placeholder: '#fff',
                         text: '#fff',
                       },
                     }}
                     disabled
-                  />                  
-                </View>                  
+                  />
+                </View>
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Dados de registro</Text>
                 </View>
@@ -294,13 +352,13 @@ const Profile: React.FC<IProfileState> = () => {
                     style={styles.textInput}
                     placeholderTextColor="steelblue"
                     theme={{
-                      colors: { 
+                      colors: {
                         primary: '#fff',
                         placeholder: '#fff',
                         text: '#fff',
                       },
                     }}
-                    onFocus ={() => {
+                    onFocus={() => {
                       setKeyboardEnable(true);
                     }}
                     onChangeText={txt => {
@@ -309,7 +367,7 @@ const Profile: React.FC<IProfileState> = () => {
                     }}
                     onEndEditing={() => setKeyboardEnable(false)}
                   />
-                </View>  
+                </View>
                 <View style={styles.viewInputs}>
                   <TextInput
                     label="CPF"
@@ -324,26 +382,25 @@ const Profile: React.FC<IProfileState> = () => {
                       checkDocumentId(event);
                       setKeyboardEnable(false);
                     }}
-                    render={(props) => (
+                    render={props => (
                       <TextInputMask {...props} mask="[000].[000].[000]-[00]" />
                     )}
                     theme={{
-                      colors: { 
+                      colors: {
                         primary: '#fff',
                         placeholder: '#fff',
                         text: '#fff',
                       },
                     }}
-                    onFocus ={() => {
+                    onFocus={() => {
                       setKeyboardEnable(true);
                     }}
                     onChangeText={(formatted: string) => {
                       setDocument(formatted);
                       setIsEditing(true);
                     }}
-
                   />
-                </View>  
+                </View>
                 <View style={styles.viewInputs}>
                   <TextInput
                     label="Data de nascimento"
@@ -352,17 +409,17 @@ const Profile: React.FC<IProfileState> = () => {
                     style={styles.textInput}
                     keyboardType="numeric"
                     placeholderTextColor="steelblue"
-                    render={(props) => (
+                    render={props => (
                       <TextInputMask {...props} mask="[00]/[00]/[0000]" />
                     )}
                     theme={{
-                      colors: { 
+                      colors: {
                         primary: '#fff',
                         placeholder: '#fff',
                         text: '#fff',
                       },
                     }}
-                    onFocus ={() => {
+                    onFocus={() => {
                       setKeyboardEnable(true);
                     }}
                     onChangeText={(formatted: string) => {
@@ -370,10 +427,9 @@ const Profile: React.FC<IProfileState> = () => {
                       setIsEditing(true);
                     }}
                     onEndEditing={() => setKeyboardEnable(false)}
-
                   />
-                </View> 
-                
+                </View>
+
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Telefones</Text>
                 </View>
@@ -384,49 +440,60 @@ const Profile: React.FC<IProfileState> = () => {
                   keyExtractor={item => item.id}
                 />
 
+                <TouchableOpacity
+                  style={styles.buttonMore}
+                  onPress={() => goAddorUpdatePhone()}
+                  activeOpacity={0.75}>
+                  <Text style={styles.textButtonMore}>Adicionar</Text>
+                </TouchableOpacity>
+
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Endereços</Text>
-                </View>                
+                </View>
 
                 <FlatList
                   data={addresses}
                   renderItem={renderItem}
                   keyExtractor={item => item.id}
                 />
-                                                
-              <TouchableOpacity
+
+                <TouchableOpacity
+                  style={styles.buttonMore}
+                  onPress={() => addAddress()}
+                  activeOpacity={0.75}>
+                  <Text style={styles.textButtonMore}>Adicionar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                   style={styles.buttonExit}
                   onPress={() => handleLogout()}
-                  activeOpacity={0.75}
-                >
-                <Text style={styles.textButtonExit}>Sair</Text>
-              </TouchableOpacity>
-              </View>           
+                  activeOpacity={0.75}>
+                  <Text style={styles.textButtonExit}>Sair</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          )}          
-        </ScrollView>        
+          )}
+        </ScrollView>
       </LinearGradient>
       {isEditing && !keyboardEnable ? (
-           <View style={styles.viewEdit}>
-            <TouchableOpacity
-                style={styles.buttonEdit}
-                onPress={() => handleLogout()}
-                activeOpacity={0.75}
-              >
-              <Text style={styles.textbuttonEdit}>Salvar Alterações</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
+        <View style={styles.viewEdit}>
+          <TouchableOpacity
+            style={styles.buttonEdit}
+            onPress={() => handleLogout()}
+            activeOpacity={0.75}>
+            <Text style={styles.textbuttonEdit}>Salvar Alterações</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => {
               bindProfileData();
               setIsEditing(false);
-            }}
-            >
-              <Text style={styles.txtBtnCancel}>Cancelar</Text>
-            </TouchableOpacity>
-          </View> 
-        ):(
-          <></>
-        )}      
+            }}>
+            <Text style={styles.txtBtnCancel}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <></>
+      )}
     </SafeAreaView>
   );
 };
