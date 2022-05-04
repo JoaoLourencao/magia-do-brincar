@@ -46,7 +46,7 @@ const AddorUpdatePhone = ({navigation, route}) => {
             if(isEditing){
                 console.log("editando")
             }else{
-                let response = await api.post('/phones', {number: numberFormatted, ddd, type})
+                let response = await api.post('/phones', {number: numberFormatted, ddd, type, description: contactName})
                 if(response.status == "201")
                     Alert.alert('Sucesso!','Número cadastrado!');
                 else
