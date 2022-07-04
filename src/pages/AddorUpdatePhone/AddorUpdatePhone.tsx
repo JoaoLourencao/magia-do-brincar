@@ -8,22 +8,36 @@ import Loading from '../../components/Loading';
 import api from '../../services/apis';
 import { styles } from './styles';
 
-const AddorUpdatePhone = ({ navigation, route }) => {
+const AddorUpdatePhone = ({navigation, route}) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [id, setId] = useState(null);
     const [contactName, setContactName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [phoneType, setPhoneType] = useState("");
     const [number, setNumber] = useState("");
     const [mask, setMask] = useState("");
 
-    console.log(route.params);
+    useEffect(() => {
+        if(route.params && route.params.item){
+            setId(route.params.item.id)
+            setContactName(route.params.item.description)
+            setPhoneType(route.params.item.type)
+            setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
+            setIsEditing(true)
+            console.log(contactName, phoneType, number)
+        }
+    }, [route.params])
 
     useEffect(() => {
         setNumber("");
-        if (phoneType == "fixo")
+        if (phoneType == "Fixo"){
             setMask("([00]) [0000]-[0000]")
-        else
+            if(isEditing && route.params.item.type == 'Fixo') setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
+        }
+        else{
             setMask("([00]) [00000]-[0000]")
+            if(isEditing && route.params.item.type == 'Celular') setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
+        }
 
     }, [phoneType]);
 
@@ -42,7 +56,19 @@ const AddorUpdatePhone = ({ navigation, route }) => {
             let description = contactName;
 
             if (isEditing) {
-                console.log("editando")
+                let response = await api.put(`/phones/${id}`, {number: numberFormatted, ddd, type, description })
+                if (response.status == 200) {
+                    Alert.alert('Sucesso!', 'Número alterado!', [
+                        {
+                            text: "OK", onPress: () => {
+                                route.params.setIsAddOrUpdatePhone(true);
+                                navigation.goBack();
+                            }
+                        }
+                    ]);
+                }
+                else
+                    Alert.alert('Oops!', 'Ocorreu um erro ao alterar o telefone!');
             } else {
                 let response = await api.post('/phones', { number: numberFormatted, ddd, type, description })
                 if (response.status == 201) {
@@ -112,8 +138,8 @@ const AddorUpdatePhone = ({ navigation, route }) => {
                                         onValueChange={(itemValue, itemIndex) => setPhoneType(itemValue)}
                                     >
                                         <Picker.Item label="Tipo do número" value="" />
-                                        <Picker.Item label="Celular" value="celular" />
-                                        <Picker.Item label="Fixo" value="fixo" />
+                                        <Picker.Item label="Celular" value="Celular" />
+                                        <Picker.Item label="Fixo" value="Fixo" />
                                     </Picker>
                                 </View>
                                 <View style={styles.viewInputs}>

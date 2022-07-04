@@ -49,64 +49,21 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
         ddd={item.ddd}
         id={item.id}
         descPhone={item.description}
+        item={item}
       />
     );
   };
 
-  const ItemPhone = ({ type, phone, ddd, id, descPhone }) => {
+  const ItemPhone = ({type, phone, ddd, id, descPhone, item}) => {
     return (
       <Card style={styles.cardAddress}>
-        {descPhone ? (
-          <>
-            <Card.Title
-              titleStyle={styles.cardTitle}
-              subtitleStyle={styles.cardSubTitle}
-              title={descPhone}
-              style={{ marginBottom: 5 }}
-              subtitle={type}
-              right={props => (
-                <IconButton
-                  color="white"
-                  {...props}
-                  icon="dots-vertical"
-                  onPress={() => {
-                    Alert.alert(
-                      type,
-                      formatPhone(ddd + phone),
-                      [
-                        {
-                          text: 'Excluir',
-                          onPress: () => {
-                            removePhone(id);
-                          }
-                        },
-                        {
-                          text: 'Cancelar',
-                          style: 'cancel',
-                          onPress: () => console.log('Ask me later pressed'),
-                        },
-                        {
-                          text: 'Editar',
-                          onPress: () => console.log('OK Pressed'),
-                        },
-                      ],
-                      { cancelable: false }
-                    );
-                  }}
-                />
-              )}
-            />
-            <Card.Content>
-              <Text style={{ marginBottom: 15 }}>{formatPhone(ddd + phone)}</Text>
-            </Card.Content>
-          </>
-        ) : (
+        <>
           <Card.Title
             titleStyle={styles.cardTitle}
             subtitleStyle={styles.cardSubTitle}
-            title={type}
+            title={descPhone ? descPhone : type}
             style={{ marginBottom: 5 }}
-            subtitle={formatPhone(ddd + phone)}
+            subtitle={descPhone ? type : null}
             right={props => (
               <IconButton
                 color="white"
@@ -125,12 +82,12 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
                       },
                       {
                         text: 'Cancelar',
-                        onPress: () => console.log('Cancel Pressed'),
                         style: 'cancel',
+                        onPress: () => console.log('Ask me later pressed'),
                       },
                       {
                         text: 'Editar',
-                        onPress: () => console.log('OK Pressed'),
+                        onPress: () => goAddorUpdatePhone(item),
                       },
                     ],
                     { cancelable: false }
@@ -139,7 +96,10 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
               />
             )}
           />
-        )}
+          <Card.Content>
+            <Text style={{ marginBottom: 15 }}>{formatPhone(ddd + phone)}</Text>
+          </Card.Content>
+        </>
       </Card>
     );
   };
@@ -296,9 +256,9 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
     });
   }
 
-  const goAddorUpdatePhone = () => {
+  const goAddorUpdatePhone = (item = null) => {
     setIsAddOrUpdatePhone(false);
-    navigation.navigate('AddorUpdatePhone', { setIsAddOrUpdatePhone });
+    navigation.navigate('AddorUpdatePhone', {item, setIsAddOrUpdatePhone});
   };
 
   function bindProfileData() {
@@ -322,15 +282,16 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
     });
   }
 
+  async function getPhones() {
+    setIsLoading(true);
+    const phones = (await api.get('/users/phones')).data.data;
+    setPhones(phones);
+    setIsLoading(false);
+  }
+
 
   useEffect(() => {
-    setUserName("");
-    setName("");
-    setDocument("");
-    setBirthdate("");
-    setAddresses(null);
-    setPhones("");
-    bindProfileData();
+    getPhones()
     setIsAddOrUpdatePhone(false);
   }, [isAddOrUpdatePhone]);
 
