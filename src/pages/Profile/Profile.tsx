@@ -26,8 +26,8 @@ interface IProfileState {
   isLoading: boolean;
 }
 
-const Profile: React.FC<IProfileState> = ({navigation}) => {
-  const renderItem = ({item}) => {
+const Profile: React.FC<IProfileState> = ({ navigation }) => {
+  const renderItem = ({ item }) => {
     return (
       <Item
         addressdesc={item.description}
@@ -41,7 +41,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
     );
   };
 
-  const renderPhones = ({item}) => {
+  const renderPhones = ({ item }) => {
     return (
       <ItemPhone
         type={item.type}
@@ -53,7 +53,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
     );
   };
 
-  const ItemPhone = ({type, phone, ddd, id, descPhone}) => {
+  const ItemPhone = ({ type, phone, ddd, id, descPhone }) => {
     return (
       <Card style={styles.cardAddress}>
         {descPhone ? (
@@ -62,7 +62,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
               titleStyle={styles.cardTitle}
               subtitleStyle={styles.cardSubTitle}
               title={descPhone}
-              style={{marginBottom: 5}}
+              style={{ marginBottom: 5 }}
               subtitle={type}
               right={props => (
                 <IconButton
@@ -76,25 +76,28 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
                       [
                         {
                           text: 'Excluir',
-                          onPress: () => console.log('Ask me later pressed'),
+                          onPress: () => {
+                            removePhone(id);
+                          }
                         },
                         {
                           text: 'Cancelar',
                           style: 'cancel',
+                          onPress: () => console.log('Ask me later pressed'),
                         },
                         {
                           text: 'Editar',
                           onPress: () => console.log('OK Pressed'),
                         },
                       ],
-                      {cancelable: false}
+                      { cancelable: false }
                     );
                   }}
                 />
               )}
             />
             <Card.Content>
-              <Text style={{marginBottom: 15}}>{formatPhone(ddd + phone)}</Text>
+              <Text style={{ marginBottom: 15 }}>{formatPhone(ddd + phone)}</Text>
             </Card.Content>
           </>
         ) : (
@@ -102,7 +105,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
             titleStyle={styles.cardTitle}
             subtitleStyle={styles.cardSubTitle}
             title={type}
-            style={{marginBottom: 5}}
+            style={{ marginBottom: 5 }}
             subtitle={formatPhone(ddd + phone)}
             right={props => (
               <IconButton
@@ -116,7 +119,9 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
                     [
                       {
                         text: 'Excluir',
-                        onPress: () => console.log('Ask me later pressed'),
+                        onPress: () => {
+                          removePhone(id);
+                        }
                       },
                       {
                         text: 'Cancelar',
@@ -128,7 +133,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
                         onPress: () => console.log('OK Pressed'),
                       },
                     ],
-                    {cancelable: false}
+                    { cancelable: false }
                   );
                 }}
               />
@@ -181,7 +186,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
                           onPress: () => console.log('OK Pressed'),
                         },
                       ],
-                      {cancelable: false}
+                      { cancelable: false }
                     );
                   }}
                 />
@@ -189,7 +194,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
             />
             <Card.Content>
               <Text>{city + '/' + uf}</Text>
-              <Text style={{marginBottom: 15}}>{complement}</Text>
+              <Text style={{ marginBottom: 15 }}>{complement}</Text>
             </Card.Content>
           </>
         ) : (
@@ -223,14 +228,14 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
                           onPress: () => console.log('OK Pressed'),
                         },
                       ],
-                      {cancelable: false}
+                      { cancelable: false }
                     );
                   }}
                 />
               )}
             />
             <Card.Content>
-              <Text style={{marginBottom: 15}}>{complement}</Text>
+              <Text style={{ marginBottom: 15 }}>{complement}</Text>
             </Card.Content>
           </>
         )}
@@ -238,7 +243,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
     );
   };
 
-  const {user, signOutApp} = useAuth();
+  const { user, signOutApp } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   //profile data
@@ -250,6 +255,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
   const [addresses, setAddresses] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [keyboardEnable, setKeyboardEnable] = useState(false);
+  const [isAddOrUpdatePhone, setIsAddOrUpdatePhone] = useState(false);
 
   const checkDocumentId = (
     documentId: NativeSyntheticEvent<TextInputEndEditingEventData>
@@ -271,8 +277,28 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
     return JSON.parse(profile!);
   }
 
+  async function deletePhone(idPhone: string): Promise<any> {
+    const result = await api.delete('/phones/' + idPhone);
+    return result;
+  }
+
+  async function removePhone(idPhone: string) {
+    deletePhone(idPhone).then((result) => {
+      if (result.status === 204) {
+        Alert.alert('Sucesso!', 'Número excluído!', [
+          { text: "OK", onPress: () => bindProfileData() }
+        ]);
+      } else {
+        Alert.alert('Erro!', 'Não foi possível excluir o número.', [
+          { text: "OK", onPress: () => bindProfileData() }
+        ]);
+      }
+    });
+  }
+
   const goAddorUpdatePhone = () => {
-      navigation.navigate('AddorUpdatePhone');
+    setIsAddOrUpdatePhone(false);
+    navigation.navigate('AddorUpdatePhone', { setIsAddOrUpdatePhone });
   };
 
   function bindProfileData() {
@@ -296,8 +322,20 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
     });
   }
 
+
+  useEffect(() => {
+    setUserName("");
+    setName("");
+    setDocument("");
+    setBirthdate("");
+    setAddresses(null);
+    setPhones("");
+    bindProfileData();
+    setIsAddOrUpdatePhone(false);
+  }, [isAddOrUpdatePhone]);
+
   const addAddress = () => {
-    
+    navigation.navigate('AddorUpdateAddress');
   };
 
   const handleLogout = () => {
@@ -318,8 +356,9 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
             <View style={styles.loadLogin}>
               <Loading isLoading={isLoading} />
             </View>
+
           ) : (
-            <View style={styles.viewProfile}>           
+            <View style={styles.viewProfile}>
               <View style={styles.gridInfo}>
                 <View style={styles.infoItem}>
                   <Text style={styles.textInfo}>Acesso</Text>
@@ -475,7 +514,7 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
           )}
         </ScrollView>
       </LinearGradient>
-      {isEditing && !keyboardEnable ? (
+      {isEditing && !keyboardEnable && (
         <View style={styles.viewEdit}>
           <TouchableOpacity
             style={styles.buttonEdit}
@@ -491,8 +530,6 @@ const Profile: React.FC<IProfileState> = ({navigation}) => {
             <Text style={styles.txtBtnCancel}>Cancelar</Text>
           </TouchableOpacity>
         </View>
-      ) : (
-        <></>
       )}
     </SafeAreaView>
   );

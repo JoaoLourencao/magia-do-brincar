@@ -8,7 +8,7 @@ import Loading from '../../components/Loading';
 import api from '../../services/apis';
 import { styles } from './styles';
 
-const AddorUpdatePhone = ({ navigation, route }) => {
+const AddorUpdateAddress = ({ navigation, route }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [contactName, setContactName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,7 @@ const AddorUpdatePhone = ({ navigation, route }) => {
         navigation.goBack();
     }
 
-    async function addorUpdatePhone() {
+    async function addorUpdateAddress() {
         if ([phoneType, number].includes(""))
             Alert.alert('Oops!', 'Tipo do número e número devem ser preenchidos');
         else {
@@ -74,9 +74,9 @@ const AddorUpdatePhone = ({ navigation, route }) => {
                     <Ionicons onPress={() => goBack()} name="close" size={35} color="gray" />
                 </View>
                 {isEditing ? (
-                    <Text style={styles.profileText}>Editar telefone</Text>
+                    <Text style={styles.profileText}>Editar endereço</Text>
                 ) : (
-                    <Text style={styles.profileText}>Cadastrar telefone</Text>
+                    <Text style={styles.profileText}>Cadastrar endereço</Text>
                 )}
                 <ScrollView>
                     {isLoading ? (
@@ -141,7 +141,7 @@ const AddorUpdatePhone = ({ navigation, route }) => {
                                 </View>
                                 <TouchableOpacity
                                     style={styles.buttonMore}
-                                    onPress={() => addorUpdatePhone()}
+                                    onPress={() => addorUpdateAddress()}
                                     activeOpacity={0.75}>
                                     <Text style={styles.textButtonMore}>Salvar</Text>
                                 </TouchableOpacity>
@@ -154,4 +154,4 @@ const AddorUpdatePhone = ({ navigation, route }) => {
     )
 }
 
-export default AddorUpdatePhone
+export default AddorUpdateAddress

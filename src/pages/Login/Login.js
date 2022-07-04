@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   Image,
   Keyboard,
   SafeAreaView,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Text, TextInput} from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import LogoImg from '../../assets/img/logo.png';
 import Loading from '../../components/Loading';
-import {useAuth} from '../../contexts/auth';
-import {styles} from './styles';
+import { useAuth } from '../../contexts/auth';
+import { styles } from './styles';
 
 const Login = ({navigation}) => {
   const [statusError, setstatusError] = useState(false);

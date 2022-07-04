@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 25,
     fontWeight: 'bold',
-    marginTop: 15,
-    color: '#fff',
+    color: '#514a78',
   },
   textInfo: {
     fontSize: 20,
@@ -119,15 +118,6 @@ const styles = StyleSheet.create({
   buttonLabel: {
     color: '#FFF',
   },
-  buttonMore: {
-    backgroundColor: 'rgba(233, 221, 242, 0.9)',
-    alignItems: 'center',
-    paddingVertical: 15,
-    marginHorizontal: 20,
-    marginTop: 30,
-    height: 50,
-    borderRadius: 100,
-  },
 
   buttonEdit: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -146,7 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(233, 221, 242, 0.9)',
     alignItems: 'center',
     paddingVertical: 15,
-    marginTop: 10,
+    marginTop: 30,
     width: '100%',
     height: 50,
     borderRadius: 100,
@@ -172,14 +162,25 @@ const styles = StyleSheet.create({
     color: 'rgba(233, 221, 242, 1)',
     fontWeight: 'bold',
   },
-  textButtonMore: {
-    color: '#514a78',
-    fontWeight: 'bold',
+  closeBtn:{
+    textAlign: 'right',
+    alignSelf: 'flex-end',
+    paddingHorizontal: 15,
+    paddingTop: 15,
   },
   viewInputs: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
+  },
+  viewPicker: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    borderColor: '#C4C4C4',
+    backgroundColor: '#F6F6F6',
+    borderBottomWidth: 1,
+    marginTop: 15
   },
   iconInputs: {
     alignSelf: 'center',
