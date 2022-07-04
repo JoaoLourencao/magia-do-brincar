@@ -27,8 +27,8 @@ Para conseguir executar o projeto, clone o projeto e siga os passos abaixo.
 
 - Node.js + NPM
 - React Native
-- JDK 8
-- Android Studio / Genymotion para emular
+- JDK
+- Android Studio
 
 2. Run Commands: 
 
