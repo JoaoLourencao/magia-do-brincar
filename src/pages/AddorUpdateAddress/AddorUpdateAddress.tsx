@@ -1,64 +1,93 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Alert, Picker, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { TextInput } from 'react-native-paper';
 import TextInputMask from 'react-native-text-input-mask';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loading from '../../components/Loading';
-import api from '../../services/apis';
+import {api, api_cep} from '../../services/apis';
 import { styles } from './styles';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AddorUpdateAddress = ({ navigation, route }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [contactName, setContactName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [phoneType, setPhoneType] = useState("");
+    const [id, setId] = useState("");
+    const [postal_code, setPostalCode] = useState("");
+    const [public_place, setPublicPlace] = useState("");
     const [number, setNumber] = useState("");
-    const [mask, setMask] = useState("");
-
-    console.log(route.params);
+    const [district, setDistrict] = useState("");
+    const [city, setCity] = useState("");
+    const [uf, setUf] = useState("");
+    const [complement, setComplement] = useState("");
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
-        setNumber("");
-        if (phoneType == "fixo")
-            setMask("([00]) [0000]-[0000]")
-        else
-            setMask("([00]) [00000]-[0000]")
-
-    }, [phoneType]);
+        if(route.params && route.params.item){
+            setId(route.params.item.id)
+            setPostalCode(route.params.item.postal_code)
+            setPublicPlace(route.params.item.public_place)
+            setNumber(route.params.item.number)
+            setDistrict(route.params.item.district)
+            setCity(route.params.item.city)
+            setUf(route.params.item.uf)
+            setComplement(route.params.item.complement)
+            setDescription(route.params.item.description)
+            setIsEditing(true)
+        }
+    }, [route.params])
 
     const goBack = () => {
         navigation.goBack();
     }
 
-    async function addorUpdateAddress() {
-        if ([phoneType, number].includes(""))
-            Alert.alert('Oops!', 'Tipo do número e número devem ser preenchidos');
-        else {
-            setIsLoading(true);
-            let ddd = number.split(' ')[0];
-            let numberFormatted = number.split(' ')[1].replace('-', '');
-            let type = phoneType[0].toLocaleUpperCase() + phoneType.substring(1);
-            let description = contactName;
-
-            if (isEditing) {
-                console.log("editando")
-            } else {
-                let response = await api.post('/phones', { number: numberFormatted, ddd, type, description })
-                if (response.status == 201) {
-                    Alert.alert('Sucesso!', 'Número cadastrado!', [
-                        {
-                            text: "OK", onPress: () => {
-                                route.params.setIsAddOrUpdatePhone(true);
-                                navigation.goBack();
-                            }
-                        }
-                    ]);
-                }
-                else
-                    Alert.alert('Oops!', 'Ocorreu um erro ao cadastrar um telefone!');
+    useMemo(async () => {
+        try{
+            if(postal_code.length == 9){
+                let address = (await api_cep.get(`${postal_code}/json/`)).data
+                setPublicPlace(address.logradouro ? address.logradouro : null)
+                setDistrict(address.bairro ? address.bairro : null)
+                setCity(address.localidade ? address.localidade : null)
+                setUf(address.uf ? address.uf : null)
+                setComplement(address.complement ? address.complement : null)
             }
-            setIsLoading(false);
+        }
+        catch(e){
+            console.log(e.response.status)
+        }
+    }, [postal_code])
+
+    async function addorUpdateAddress() {
+       
+        setIsLoading(true);
+        
+        if(isEditing){
+            let response = await api.put(`/addresses/${id}`, {
+                postal_code, public_place, number, district, 
+                city, uf, complement, description
+            })
+            if(response.status == 200){
+                Alert.alert('Sucesso!', 'Endereço alterado!')
+            }
+            else{
+                Alert.alert('Oops!', 'Ocorreu um erro ao alterar o endereço!');
+            }
+            route.params.setIsAddOrUpdateAddress(true);
+            navigation.goBack();
+        } 
+        else{
+            let response = await api.post('/addresses', { 
+                postal_code, public_place, number, district, 
+                city, uf, complement, description
+                })
+            if (response.status == 201) {
+                Alert.alert('Sucesso!', 'Endereço cadastrado!')
+            }
+            else{
+                Alert.alert('Oops!', 'Ocorreu um erro ao cadastrar um endereço!');
+            }
+            route.params.setIsAddOrUpdateAddress(true);
+            navigation.goBack();
+           
         }
     }
 
@@ -88,9 +117,9 @@ const AddorUpdateAddress = ({ navigation, route }) => {
                             <View style={styles.gridInfo}>
                                 <View style={styles.viewInputs}>
                                     <TextInput
-                                        label="Nome do contato"
+                                        label="Nome do endereço"
                                         mode="flat"
-                                        value={contactName}
+                                        value={description}
                                         style={styles.textInput}
                                         placeholderTextColor="red"
                                         theme={{
@@ -101,32 +130,58 @@ const AddorUpdateAddress = ({ navigation, route }) => {
                                             },
                                         }}
                                         onChangeText={txt => {
-                                            setContactName(txt);
+                                            setDescription(txt);
                                         }}
                                     />
                                 </View>
-                                <View style={styles.viewPicker}>
-                                    <Picker
-                                        selectedValue={phoneType}
-                                        style={{ height: 50, width: "100%", justifyContent: "center", color: '#514a78' }}
-                                        onValueChange={(itemValue, itemIndex) => setPhoneType(itemValue)}
-                                    >
-                                        <Picker.Item label="Tipo do número" value="" />
-                                        <Picker.Item label="Celular" value="celular" />
-                                        <Picker.Item label="Fixo" value="fixo" />
-                                    </Picker>
+                                <View style={styles.viewInputs}>
+                                    <TextInput
+                                        label="CEP"
+                                        mode="flat"
+                                        value={postal_code}
+                                        style={styles.textInput}
+                                        placeholderTextColor="red"
+                                        theme={{
+                                            colors: {
+                                                primary: '#514a78',
+                                                placeholder: '#514a78',
+                                                text: '#514a78',
+                                            },
+                                        }}
+                                        render={props => (
+                                            <TextInputMask {...props} mask={'[00000]-[000]'} />
+                                        )}
+                                        onChangeText={txt => {
+                                            setPostalCode(txt);
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.viewInputs}>
+                                    <TextInput
+                                        label="Logradouro"
+                                        mode="flat"
+                                        value={public_place}
+                                        style={styles.textInput}
+                                        placeholderTextColor="red"
+                                        theme={{
+                                            colors: {
+                                                primary: '#514a78',
+                                                placeholder: '#514a78',
+                                                text: '#514a78',
+                                            },
+                                        }}
+                                        onChangeText={txt => {
+                                            setPublicPlace(txt);
+                                        }}
+                                    />
                                 </View>
                                 <View style={styles.viewInputs}>
                                     <TextInput
                                         label="Número"
                                         mode="flat"
-                                        disabled={phoneType == "" ? true : false}
                                         value={number}
                                         style={styles.textInput}
                                         placeholderTextColor="red"
-                                        render={props => (
-                                            <TextInputMask {...props} mask={mask} />
-                                        )}
                                         theme={{
                                             colors: {
                                                 primary: '#514a78',
@@ -136,6 +191,82 @@ const AddorUpdateAddress = ({ navigation, route }) => {
                                         }}
                                         onChangeText={txt => {
                                             setNumber(txt);
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.viewInputs}>
+                                    <TextInput
+                                        label="Bairro"
+                                        mode="flat"
+                                        value={district}
+                                        style={styles.textInput}
+                                        placeholderTextColor="red"
+                                        theme={{
+                                            colors: {
+                                                primary: '#514a78',
+                                                placeholder: '#514a78',
+                                                text: '#514a78',
+                                            },
+                                        }}
+                                        onChangeText={txt => {
+                                            setDistrict(txt);
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.viewInputs}>
+                                    <TextInput
+                                        label="Cidade"
+                                        mode="flat"
+                                        value={city}
+                                        style={styles.textInput}
+                                        placeholderTextColor="red"
+                                        theme={{
+                                            colors: {
+                                                primary: '#514a78',
+                                                placeholder: '#514a78',
+                                                text: '#514a78',
+                                            },
+                                        }}
+                                        onChangeText={txt => {
+                                            setCity(txt);
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.viewInputs}>
+                                    <TextInput
+                                        label="UF"
+                                        mode="flat"
+                                        value={uf}
+                                        style={styles.textInput}
+                                        placeholderTextColor="red"
+                                        theme={{
+                                            colors: {
+                                                primary: '#514a78',
+                                                placeholder: '#514a78',
+                                                text: '#514a78',
+                                            },
+                                        }}
+                                        onChangeText={txt => {
+                                            setUf(txt);
+                                        }}
+                                    />
+                                </View>
+                                <View style={styles.viewInputs}>
+                                    <TextInput
+                                        label="Complemento"
+                                        mode="flat"
+                                        value={complement}
+                                        style={styles.textInput}
+                                        placeholderTextColor="red"
+                                        theme={{
+                                            colors: {
+                                                primary: '#514a78',
+                                                placeholder: '#514a78',
+                                                text: '#514a78',
+                                            },
+                                        }}
+                                        onChangeText={txt => {
+                                            setComplement(txt);
                                         }}
                                     />
                                 </View>

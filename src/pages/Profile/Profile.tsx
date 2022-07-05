@@ -14,7 +14,7 @@ import { Card, IconButton, TextInput } from 'react-native-paper';
 import TextInputMask from 'react-native-text-input-mask';
 import Loading from '../../components/Loading';
 import { useAuth } from '../../contexts/auth';
-import api from '../../services/apis';
+import {api} from '../../services/apis';
 import { formatPhone, validateDocumentId } from '../../utils';
 import { convertDateTime } from '../../utils/index';
 import { ProfileResponse } from './profile.type';
@@ -37,6 +37,7 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
         publicplace={item.public_place}
         complement={item.complement}
         id={item.id}
+        item={item}
       />
     );
   };
@@ -112,93 +113,52 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
     publicplace,
     complement,
     id,
+    item
   }) => {
     return (
       <Card style={styles.cardAddress}>
-        {addressdesc ? (
-          <>
-            <Card.Title
-              titleStyle={styles.cardTitle}
-              subtitleStyle={styles.cardSubTitle}
-              title={addressdesc}
-              subtitle={publicplace + ', ' + number}
-              right={props => (
-                <IconButton
-                  color="white"
-                  {...props}
-                  icon="dots-vertical"
-                  onPress={() => {
-                    Alert.alert(
-                      publicplace + ', ' + number,
-                      city + '/' + uf,
-                      [
-                        {
-                          text: 'Excluir',
-                          onPress: () => console.log('Ask me later pressed'),
-                        },
-                        {
-                          text: 'Cancelar',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'Editar',
-                          onPress: () => console.log('OK Pressed'),
-                        },
-                      ],
-                      { cancelable: false }
-                    );
-                  }}
-                />
-              )}
-            />
-            <Card.Content>
-              <Text>{city + '/' + uf}</Text>
-              <Text style={{ marginBottom: 15 }}>{complement}</Text>
-            </Card.Content>
-          </>
-        ) : (
-          <>
-            <Card.Title
-              titleStyle={styles.cardTitle}
-              subtitleStyle={styles.cardSubTitle}
-              title={publicplace + ', ' + number}
-              subtitle={city + '/' + uf}
-              right={props => (
-                <IconButton
-                  color="white"
-                  {...props}
-                  icon="dots-vertical"
-                  onPress={() => {
-                    Alert.alert(
-                      publicplace + ', ' + number,
-                      city + '/' + uf,
-                      [
-                        {
-                          text: 'Excluir',
-                          onPress: () => console.log('Ask me later pressed'),
-                        },
-                        {
-                          text: 'Cancelar',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'Editar',
-                          onPress: () => console.log('OK Pressed'),
-                        },
-                      ],
-                      { cancelable: false }
-                    );
-                  }}
-                />
-              )}
-            />
-            <Card.Content>
-              <Text style={{ marginBottom: 15 }}>{complement}</Text>
-            </Card.Content>
-          </>
-        )}
+        <>
+          <Card.Title
+            titleStyle={styles.cardTitle}
+            subtitleStyle={styles.cardSubTitle}
+            title={addressdesc ? addressdesc : publicplace + ', ' + number }
+            subtitle={addressdesc ? publicplace + ', ' + number : null}
+            right={props => (
+              <IconButton
+                color="white"
+                {...props}
+                icon="dots-vertical"
+                onPress={() => {
+                  Alert.alert(
+                    publicplace + ', ' + number,
+                    city + '/' + uf,
+                    [
+                      {
+                        text: 'Excluir',
+                        onPress: () => {
+                          removeAddress(id);
+                        }
+                      },
+                      {
+                        text: 'Cancelar',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Editar',
+                        onPress: () => goAddorUpdateAddress(item),
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+                }}
+              />
+            )}
+          />
+          <Card.Content>
+            <Text style={{ marginBottom: 15 }}>{city + '/' + uf}</Text>
+          </Card.Content>
+        </>
       </Card>
     );
   };
@@ -216,6 +176,7 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [keyboardEnable, setKeyboardEnable] = useState(false);
   const [isAddOrUpdatePhone, setIsAddOrUpdatePhone] = useState(false);
+  const [isAddOrUpdateAddress, setIsAddOrUpdateAddress] = useState(false);
 
   const checkDocumentId = (
     documentId: NativeSyntheticEvent<TextInputEndEditingEventData>
@@ -242,15 +203,34 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
     return result;
   }
 
+  async function deleteAddress(id: number): Promise<any> {
+    const result = await api.delete('/addresses/' + id);
+    return result;
+  }
+
   async function removePhone(idPhone: string) {
     deletePhone(idPhone).then((result) => {
       if (result.status === 204) {
         Alert.alert('Sucesso!', 'Número excluído!', [
-          { text: "OK", onPress: () => bindProfileData() }
+          { text: "OK", onPress: () => getPhones() }
         ]);
       } else {
         Alert.alert('Erro!', 'Não foi possível excluir o número.', [
-          { text: "OK", onPress: () => bindProfileData() }
+          { text: "OK", onPress: () => getPhones() }
+        ]);
+      }
+    });
+  }
+
+  async function removeAddress(id: number) {
+    deleteAddress(id).then((result) => {
+      if (result.status === 204) {
+        Alert.alert('Sucesso!', 'Endereço excluído!', [
+          { text: "OK", onPress: () => getAddresses() }
+        ]);
+      } else {
+        Alert.alert('Erro!', 'Não foi possível excluir o endereço.', [
+          { text: "OK", onPress: () => getAddresses() }
         ]);
       }
     });
@@ -259,6 +239,11 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
   const goAddorUpdatePhone = (item = null) => {
     setIsAddOrUpdatePhone(false);
     navigation.navigate('AddorUpdatePhone', {item, setIsAddOrUpdatePhone});
+  };
+  
+  const goAddorUpdateAddress = (item = null) => {
+    setIsAddOrUpdateAddress(false);
+    navigation.navigate('AddorUpdateAddress', {item, setIsAddOrUpdateAddress});
   };
 
   function bindProfileData() {
@@ -283,21 +268,24 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
   }
 
   async function getPhones() {
-    setIsLoading(true);
     const phones = (await api.get('/users/phones')).data.data;
     setPhones(phones);
-    setIsLoading(false);
   }
-
+  
+  async function getAddresses() {
+    const addresses = (await api.get('/users/addresses')).data.data;
+    setAddresses(addresses);
+  }
 
   useEffect(() => {
     getPhones()
     setIsAddOrUpdatePhone(false);
   }, [isAddOrUpdatePhone]);
-
-  const addAddress = () => {
-    navigation.navigate('AddorUpdateAddress');
-  };
+  
+  useEffect(() => {
+    getAddresses()
+    setIsAddOrUpdateAddress(false);
+  }, [isAddOrUpdateAddress]);
 
   const handleLogout = () => {
     signOutApp();
@@ -459,7 +447,7 @@ const Profile: React.FC<IProfileState> = ({ navigation }) => {
 
                 <TouchableOpacity
                   style={styles.buttonMore}
-                  onPress={() => addAddress()}
+                  onPress={() => goAddorUpdateAddress()}
                   activeOpacity={0.75}>
                   <Text style={styles.textButtonMore}>Adicionar</Text>
                 </TouchableOpacity>

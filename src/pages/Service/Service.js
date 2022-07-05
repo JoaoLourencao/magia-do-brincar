@@ -3,7 +3,7 @@ import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Image, Touchable
 import {styles} from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-import api from '../../services/apis'
+import {api} from '../../services/apis'
 import {BASE_URL_API} from "@env"
 
 const Service = ({navigation}) =>  {

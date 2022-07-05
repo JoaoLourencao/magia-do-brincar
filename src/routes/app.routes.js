@@ -4,6 +4,7 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useCart } from '../contexts/cart';
 import AddorUpdatePhone from '../pages/AddorUpdatePhone';
+import AddorUpdateAddress from '../pages/AddorUpdateAddress';
 import Cart from '../pages/Cart';
 import DetailService from '../pages/DetailService';
 import History from '../pages/History';
@@ -50,6 +51,7 @@ const ProfileStackScreen = () => {
     <CartStack.Navigator screenOptions={{headerShown: false}}>
       <CartStack.Screen name="Perfil" component={Profile} />
       <CartStack.Screen name="AddorUpdatePhone" component={AddorUpdatePhone} />
+      <CartStack.Screen name="AddorUpdateAddress" component={AddorUpdateAddress} />
     </CartStack.Navigator>
   );
 };

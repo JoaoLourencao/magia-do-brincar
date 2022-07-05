@@ -5,7 +5,7 @@ import { TextInput } from 'react-native-paper';
 import TextInputMask from 'react-native-text-input-mask';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loading from '../../components/Loading';
-import api from '../../services/apis';
+import {api} from '../../services/apis';
 import { styles } from './styles';
 
 const AddorUpdatePhone = ({navigation, route}) => {
@@ -24,7 +24,6 @@ const AddorUpdatePhone = ({navigation, route}) => {
             setPhoneType(route.params.item.type)
             setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
             setIsEditing(true)
-            console.log(contactName, phoneType, number)
         }
     }, [route.params])
 

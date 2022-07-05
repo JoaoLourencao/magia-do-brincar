@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import api from '../services/apis';
+import {api} from '../services/apis';
 
 const AuthContext = createContext({
   signed: false,
