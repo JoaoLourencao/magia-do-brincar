@@ -28,12 +28,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '90%',
       },
+      gridInfo: {
+        marginTop: 10,
+        width: '90%',
+        alignSelf: 'center',
+      },
       title: {
         marginLeft: 15,
         fontSize: 15,
         fontWeight: 'bold',
         width: 170,
         color: '#514a78'
+      },
+      buttonMore: {
+        backgroundColor: 'rgba(233, 221, 242, 0.9)',
+        alignItems: 'center',
+        paddingVertical: 15,
+        marginHorizontal: 20,
+        marginTop: 30,
+        height: 50,
+        borderRadius: 100,
       },
       servicesText:{
         alignSelf: 'center',
@@ -56,3 +70,4 @@ const styles = StyleSheet.create({
 });
 
 export { styles };
+
