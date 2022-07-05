@@ -57,9 +57,7 @@ const AddorUpdateAddress = ({ navigation, route }) => {
     }, [postal_code])
 
     async function addorUpdateAddress() {
-       
-        setIsLoading(true);
-        
+               
         if(isEditing){
             let response = await api.put(`/addresses/${id}`, {
                 postal_code, public_place, number, district, 

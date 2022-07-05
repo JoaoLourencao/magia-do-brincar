@@ -8,79 +8,59 @@ import Loading from '../../components/Loading';
 import {api} from '../../services/apis';
 import { styles } from './styles';
 
-const AddorUpdatePhone = ({navigation, route}) => {
+const AddorUpdateEmail = ({navigation, route}) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [id, setId] = useState(null);
-    const [contactName, setContactName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [phoneType, setPhoneType] = useState("");
-    const [number, setNumber] = useState("");
-    const [mask, setMask] = useState("");
+    const [id, setId] = useState(null);
+    const [email, setEmail] = useState("");
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
         if(route.params && route.params.item){
             setId(route.params.item.id)
-            setContactName(route.params.item.description)
-            setPhoneType(route.params.item.type)
-            setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
+            setEmail(route.params.item.email)
+            setDescription(route.params.item.description)
             setIsEditing(true)
         }
     }, [route.params])
-
-    useEffect(() => {
-        setNumber("");
-        if (phoneType == "Fixo"){
-            setMask("([00]) [0000]-[0000]")
-            if(isEditing && route.params.item.type == 'Fixo') setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
-        }
-        else{
-            setMask("([00]) [00000]-[0000]")
-            if(isEditing && route.params.item.type == 'Celular') setNumber(`${route.params.item.ddd} ${route.params.item.phone}`)
-        }
-
-    }, [phoneType]);
 
     const goBack = () => {
         navigation.goBack();
     }
 
-    async function addorUpdatePhone() {
-        if ([phoneType, number].includes(""))
-            Alert.alert('Oops!', 'Tipo do número e número devem ser preenchidos');
+    async function addorUpdateEmail() {
+        if ([email].includes(""))
+            Alert.alert('Oops!', 'Email deve ser preenchido');
         else {
-            let ddd = number.split(' ')[0];
-            let numberFormatted = number.split(' ')[1].replace('-', '');
-            let type = phoneType[0].toLocaleUpperCase() + phoneType.substring(1);
-            let description = contactName;
 
             if (isEditing) {
-                let response = await api.put(`/phones/${id}`, {number: numberFormatted, ddd, type, description })
+                let response = await api.put(`/emails/${id}`, {email, description })
                 if (response.status == 200) {
-                    Alert.alert('Sucesso!', 'Número alterado!', [
+                    Alert.alert('Sucesso!', 'Email alterado!', [
                         {
                             text: "OK", onPress: () => {
-                                route.params.setIsAddOrUpdatePhone(true);
+                                route.params.setIsAddOrUpdateEmail(true);
                                 navigation.goBack();
                             }
                         }
                     ]);
                 }
                 else
-                    Alert.alert('Oops!', 'Ocorreu um erro ao alterar o telefone!');
+                    Alert.alert('Oops!', 'Ocorreu um erro ao alterar o email!');
             } else {
-                let response = await api.post('/phones', { number: numberFormatted, ddd, type, description })
+                let response = await api.post('/emails', {email, description })
                 if (response.status == 201) {
-                    Alert.alert('Sucesso!', 'Número cadastrado!', [
+                    Alert.alert('Sucesso!', 'Email cadastrado!', [
                         {
                             text: "OK", onPress: () => {
-                                route.params.setIsAddOrUpdatePhone(true);
+                                route.params.setIsAddOrUpdateEmail(true);
                                 navigation.goBack();
                             }
                         }
                     ]);
                 }
                 else
-                    Alert.alert('Oops!', 'Ocorreu um erro ao cadastrar um telefone!');
+                    Alert.alert('Oops!', 'Ocorreu um erro ao cadastrar um email!');
             }
         }
     }
@@ -97,9 +77,9 @@ const AddorUpdatePhone = ({navigation, route}) => {
                     <Ionicons onPress={() => goBack()} name="close" size={35} color="gray" />
                 </View>
                 {isEditing ? (
-                    <Text style={styles.profileText}>Editar telefone</Text>
+                    <Text style={styles.profileText}>Editar email</Text>
                 ) : (
-                    <Text style={styles.profileText}>Cadastrar telefone</Text>
+                    <Text style={styles.profileText}>Cadastrar email</Text>
                 )}
                 <ScrollView>
                     {isLoading ? (
@@ -111,9 +91,9 @@ const AddorUpdatePhone = ({navigation, route}) => {
                             <View style={styles.gridInfo}>
                                 <View style={styles.viewInputs}>
                                     <TextInput
-                                        label="Nome do contato"
+                                        label="Descrição para email"
                                         mode="flat"
-                                        value={contactName}
+                                        value={description}
                                         style={styles.textInput}
                                         placeholderTextColor="red"
                                         theme={{
@@ -124,32 +104,17 @@ const AddorUpdatePhone = ({navigation, route}) => {
                                             },
                                         }}
                                         onChangeText={txt => {
-                                            setContactName(txt);
+                                            setDescription(txt);
                                         }}
                                     />
                                 </View>
-                                <View style={styles.viewPicker}>
-                                    <Picker
-                                        selectedValue={phoneType}
-                                        style={{ height: 50, width: "100%", justifyContent: "center", color: '#514a78' }}
-                                        onValueChange={(itemValue, itemIndex) => setPhoneType(itemValue)}
-                                    >
-                                        <Picker.Item label="Tipo do número" value="" />
-                                        <Picker.Item label="Celular" value="Celular" />
-                                        <Picker.Item label="Fixo" value="Fixo" />
-                                    </Picker>
-                                </View>
                                 <View style={styles.viewInputs}>
                                     <TextInput
-                                        label="Número"
+                                        label="Email"
                                         mode="flat"
-                                        disabled={phoneType == "" ? true : false}
-                                        value={number}
+                                        value={email}
                                         style={styles.textInput}
                                         placeholderTextColor="red"
-                                        render={props => (
-                                            <TextInputMask {...props} mask={mask} />
-                                        )}
                                         theme={{
                                             colors: {
                                                 primary: '#514a78',
@@ -158,13 +123,13 @@ const AddorUpdatePhone = ({navigation, route}) => {
                                             },
                                         }}
                                         onChangeText={txt => {
-                                            setNumber(txt);
+                                            setEmail(txt);
                                         }}
                                     />
                                 </View>
                                 <TouchableOpacity
                                     style={styles.buttonMore}
-                                    onPress={() => addorUpdatePhone()}
+                                    onPress={() => addorUpdateEmail()}
                                     activeOpacity={0.75}>
                                     <Text style={styles.textButtonMore}>Salvar</Text>
                                 </TouchableOpacity>
@@ -177,4 +142,4 @@ const AddorUpdatePhone = ({navigation, route}) => {
     )
 }
 
-export default AddorUpdatePhone
+export default AddorUpdateEmail
