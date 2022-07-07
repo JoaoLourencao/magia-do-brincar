@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import {styles} from './styles';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {api} from '../../services/apis'
-import {BASE_URL_API} from "@env"
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { styles } from './styles';
 
-const Service = ({navigation}) =>  {
+const Service = ({ navigation }) => {
     const [services, setServices] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -16,30 +15,33 @@ const Service = ({navigation}) =>  {
             setServices(services.data)
             setLoading(false)
         }
-       getServices();
+        getServices();
     }, []);
 
-    const goDetail = (id) => {
+    function goDetail(id) {
+        console.log(" ------------------ carario", id)
+        let service = services.find(x => x.id == id);
         navigation.navigate('DetailService', {
-            idService: id
+            service: service
         })
     }
 
     const Item = ({ service, image, id }) => {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => goDetail(id)}>
                 <View style={styles.item}>
-                    {image && <Image source={{uri: `${BASE_URL_API}/${image}`}} style={{width: 75, height: 75, borderRadius: 5}}/>}
-                    {!image && <Image source={require(`../../assets/img/logo.png`)} style={{resizeMode: 'contain', width: 75, height: 75, borderRadius: 5}}/>}
+                    {image && <Image source={{ uri: image }} style={{ width: 75, height: 75, borderRadius: 5 }} />}
+                    {!image && <Image source={require(`../../assets/img/logo.png`)} style={{ resizeMode: 'contain', width: 75, height: 75, borderRadius: 5 }} />}
                     <Text style={styles.title} numberOfLines={1}>{service}</Text>
                     <Ionicons name="arrow-forward" size={26} color="#514a78" style={styles.iconArrow} />
                 </View>
-            </TouchableOpacity>            
-    )};
+            </TouchableOpacity>
+        )
+    };
 
     const renderItem = ({ item }) => {
         return (
-            <Item 
+            <Item
                 service={item.service}
                 image={item.image}
                 id={item.id}
@@ -49,14 +51,14 @@ const Service = ({navigation}) =>  {
 
     return (
         <SafeAreaView style={styles.container}>
-            <LinearGradient useAngle={true} angle={130} locations={[0.4,0.7,1]} colors={['#a295f1', '#d592c7', '#f192a9']} style={styles.gradient}>  
-                <Text style={styles.servicesText}>Serviços</Text>      
+            <LinearGradient useAngle={true} angle={130} locations={[0.4, 0.7, 1]} colors={['#a295f1', '#d592c7', '#f192a9']} style={styles.gradient}>
+                <Text style={styles.servicesText}>Serviços</Text>
                 {
-                    loading ? 
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    loading ?
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                             <ActivityIndicator size='large' color='#211F20' />
                         </View>
-                    : 
+                        :
                         <FlatList
                             data={services}
                             renderItem={renderItem}
