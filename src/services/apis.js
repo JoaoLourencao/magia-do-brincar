@@ -6,6 +6,8 @@ const api = axios.create({
   baseURL: BASE_URL_API,
 });
 
+console.log(BASE_URL_API, "------------")
+
 api.interceptors.request.use(async (config, error) => {
   const user = JSON.parse(await AsyncStorage.getItem('@MagiaDoBrincar:user'));
 
@@ -22,4 +24,4 @@ const api_cep = axios.create({
 export {
   api,
   api_cep
-} 
+};

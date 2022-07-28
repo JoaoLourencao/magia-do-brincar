@@ -27,6 +27,10 @@ const Home = ({navigation}) => {
         })
     };
 
+    const goListSchedules = () => {
+        navigation.navigate('ListShedules');
+    };
+
     return (
         
         <SafeAreaView style={styles.container}>
@@ -65,6 +69,19 @@ const Home = ({navigation}) => {
                             <Button
                                 mode="contained"
                                 onPress={() => goDetail('eQfTctd27mMAaoHuSKxa')}
+                                style={styles.button}
+                                labelStyle={styles.buttonLabel}
+                            >
+                                Saiba mais
+                            </Button>
+                        </View>
+                    </ImageBackground>
+                    <ImageBackground source={Duvidas} resizeMode="cover" style={styles.card} imageStyle={{ borderRadius: 8, opacity: 0.5, backgroundColor: 'black'}}>
+                        <Text style={styles.textName}>Dúvidas</Text>
+                        <View style={styles.viewArrow}>
+                            <Button
+                                mode="contained"
+                                onPress={goListSchedules}
                                 style={styles.button}
                                 labelStyle={styles.buttonLabel}
                             >

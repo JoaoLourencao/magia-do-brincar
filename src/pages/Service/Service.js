@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {api} from '../../services/apis'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { api } from '../../services/apis';
 import { styles } from './styles';
 
 const Service = ({ navigation }) => {
@@ -19,7 +19,6 @@ const Service = ({ navigation }) => {
     }, []);
 
     function goDetail(id) {
-        console.log(" ------------------ carario", id)
         let service = services.find(x => x.id == id);
         navigation.navigate('DetailService', {
             service: service

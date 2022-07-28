@@ -3,14 +3,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useCart } from '../contexts/cart';
-import AddorUpdatePhone from '../pages/AddorUpdatePhone';
 import AddorUpdateAddress from '../pages/AddorUpdateAddress';
-import AddorUpdateEmail from '../pages/AddorUpdateEmail';
 import AddorUpdateChild from '../pages/AddorUpdateChild';
+import AddorUpdateEmail from '../pages/AddorUpdateEmail';
+import AddorUpdatePhone from '../pages/AddorUpdatePhone';
 import Cart from '../pages/Cart';
 import DetailService from '../pages/DetailService';
 import History from '../pages/History';
 import Home from '../pages/Home';
+import ListShedules from '../pages/ListShedules';
 import Profile from '../pages/Profile';
 import Rating from '../pages/Rating';
 import Service from '../pages/Service';
@@ -24,6 +25,7 @@ const ServiceStackScreen = () => {
   return (
     <ServiceStack.Navigator screenOptions={{headerShown: false}}>
       <ServiceStack.Screen name="Home" component={Home} />
+      <ServiceStack.Screen name="ListShedules" component={ListShedules} />
       <ServiceStack.Screen name="DetailService" component={DetailService} />
     </ServiceStack.Navigator>
   );
