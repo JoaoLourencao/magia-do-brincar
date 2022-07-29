@@ -15,6 +15,7 @@ import ListShedules from '../pages/ListShedules';
 import Profile from '../pages/Profile';
 import Rating from '../pages/Rating';
 import Service from '../pages/Service';
+import Doubt from '../pages/Doubt';
 
 const Tab = createBottomTabNavigator();
 const ServiceStack = createStackNavigator();
@@ -27,6 +28,7 @@ const ServiceStackScreen = () => {
       <ServiceStack.Screen name="Home" component={Home} />
       <ServiceStack.Screen name="ListShedules" component={ListShedules} />
       <ServiceStack.Screen name="DetailService" component={DetailService} />
+      <ServiceStack.Screen name="Doubt" component={Doubt} />
     </ServiceStack.Navigator>
   );
 };
@@ -61,6 +63,7 @@ const ProfileStackScreen = () => {
     </CartStack.Navigator>
   );
 };
+
 
 const AppRoutes = () => {
   const {lengthItens} = useCart();

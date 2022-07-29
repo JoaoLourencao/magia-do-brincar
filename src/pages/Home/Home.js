@@ -26,6 +26,10 @@ const Home = ({navigation}) => {
             idService: id
         })
     };
+    
+    const goDoubt = () => {
+        navigation.navigate('Doubt')
+    };
 
     const goListSchedules = () => {
         navigation.navigate('ListShedules');
@@ -68,7 +72,7 @@ const Home = ({navigation}) => {
                         <View style={styles.viewArrow}>
                             <Button
                                 mode="contained"
-                                onPress={() => goDetail('eQfTctd27mMAaoHuSKxa')}
+                                onPress={goDoubt}
                                 style={styles.button}
                                 labelStyle={styles.buttonLabel}
                             >
